@@ -64,7 +64,7 @@ struct HistoryView: View {
                                             .font(.headline.bold())
                                             .foregroundStyle(.white)
                                             .frame(width: 32, height: 32)
-                                            .background(Color.gray, in: Circle())
+                                            .background(nutriScoreColor(letter), in: Circle())
                                     }
                                 }
                             }
