@@ -47,11 +47,6 @@ struct ScanView: View {
             .sheet(isPresented: $showingScanner) {
                 scannerSheet
             }
-            .sheet(isPresented: $showingOCR) {
-                if let ocrText {
-                    OCRResultView(text: ocrText)
-                }
-            }
             .onChange(of: photoItem) { _, item in
                 guard let item else { return }
                 Task { @MainActor in
@@ -149,6 +144,15 @@ struct ScanView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        // The OCR sheet lives here, on this view — not on the NavigationStack
+        // next to the scanner sheet. Two .sheet modifiers on the same view
+        // conflict: only one of them ever presents, and the OCR one was the
+        // dead one (test05 tapped the sample button and no sheet appeared).
+        .sheet(isPresented: $showingOCR) {
+            if let ocrText {
+                OCRResultView(text: ocrText)
+            }
+        }
     }
 
     private func runOCR(on item: PhotosPickerItem) async {
