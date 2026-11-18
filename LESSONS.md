@@ -20,7 +20,7 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 
 ## 3. Simplicity wins — core-features discipline
 
-- Free core always works forever: **unlimited barcode scans + product card**. Pro is depth only: unlimited history, multiple allergen profiles, OCR label explain, export.
+- Free core always works forever: **unlimited barcode scans + product card**. Pro is depth only: unlimited history, multiple allergen profiles, OCR label explain, search by product name, export.
 - No social, no AI coach, no ads, no tracking, no account, no backend.
 - Remove nonsense features before they get built. Explicitly **not** building in v1, and not to be added without a new decision: Apple Watch, widgets, Siri, community, meal planning, calorie tracking.
 - One job: scan → know what's in it → save if you want.

@@ -7,7 +7,7 @@ import StoreKit
 ///   labelcheck_pro_lifetime — non-consumable, $19.99 once
 /// One Pro entitlement, not two feature sets. Free keeps unlimited barcode
 /// scans and the product card forever; Pro adds depth only (unlimited
-/// history, multiple allergen profiles, OCR label explain, export).
+/// history, multiple allergen profiles, OCR label explain, search by product name, export).
 @MainActor
 final class StoreManager: ObservableObject {
     static let yearlyProductID = "labelcheck_pro_yearly"
