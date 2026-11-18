@@ -43,8 +43,10 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(productName.waitForExistence(timeout: 10))
         // LC-1: Nutella is grade E, so the alternatives section loads from
         // bundled sample data (offline). It sits below the fold, so it does
-        // not change this shot; test10 captures it.
-        XCTAssertTrue(app.otherElements["alternatives-section"].waitForExistence(timeout: 10))
+        // not change this shot; test10 captures it. The heading text is
+        // the wait target: a plain VStack's identifier did not surface in
+        // the XCUI tree (run 44379182540), even though the section rendered.
+        XCTAssertTrue(app.staticTexts["Higher Nutri-Score in this category"].waitForExistence(timeout: 10))
         saveScreenshot(named: "02-product-card")
     }
 
@@ -160,7 +162,9 @@ final class ScreenshotTests: XCTestCase {
         field.typeText("3017620422003")
         app.buttons["manual-lookup-button"].tap()
         XCTAssertTrue(app.staticTexts["product-name"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.otherElements["alternatives-section"].waitForExistence(timeout: 10))
+        // Wait on the section heading text, not the section container's
+        // identifier: see test02.
+        XCTAssertTrue(app.staticTexts["Higher Nutri-Score in this category"].waitForExistence(timeout: 10))
         // Scroll the section into view: the card is a ScrollView, so a
         // swipe moves it (unlike the Lists in test04/test07). Stop as
         // soon as the first alternative row is tappable.

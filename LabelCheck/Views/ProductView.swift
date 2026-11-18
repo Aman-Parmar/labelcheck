@@ -265,6 +265,12 @@ struct ProductView: View {
                         ProgressView()
                     }
                 }
+                // A plain VStack is not an accessibility element, so the
+                // identifier below would not surface in the XCUI tree
+                // (the screenshot lane waited 10 s for it and never found
+                // it, run 44379182540). Grouping the children makes the
+                // container itself an element carrying the identifier.
+                .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("alternatives-section")
             }
         }
