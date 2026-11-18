@@ -1,5 +1,6 @@
 import Foundation
 import SwiftData
+import SwiftUI
 import UniformTypeIdentifiers
 
 /// History export (CSV), a Pro feature. The paywall and Settings already
