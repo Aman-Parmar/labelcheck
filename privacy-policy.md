@@ -10,7 +10,7 @@ LabelCheck collects nothing about you. There is no account, no analytics, no adv
 
 ## What the app does with your data
 
-- **Barcodes you scan.** When you scan or type a barcode, the app sends that barcode — and only that barcode — to Open Food Facts (world.openfoodfacts.org) to look up the product. Open Food Facts is an independent open database; its own privacy policy applies to that lookup. No name, email, location, or device identifier is sent with it.
+- **Barcodes you scan.** When you scan or type a barcode, the app sends that barcode, and only that barcode, to Open Food Facts (world.openfoodfacts.org) to look up the product. Open Food Facts is an independent open database; its own privacy policy applies to that lookup. No name, email, location, or device identifier is sent with it.
 - **Camera and photos.** The camera is used to scan barcodes, and a photo you choose is used to read a label. Images are processed on your phone (Apple Vision and Natural Language frameworks) and are never uploaded anywhere.
 - **Scan history and allergen profiles.** Stored on your phone only, in the app's local database. They are never synced, shared, or uploaded. Deleting the app deletes them.
 - **Purchases.** Pro purchases are handled by Apple through StoreKit. The app never sees your card number or payment details. Apple may share a transaction record with us through App Store Connect for accounting; we do not use it for advertising or profiling.
@@ -25,7 +25,7 @@ Product information (names, Nutri-Score, NOVA group, allergens, ingredients, nut
 
 ## Children
 
-LabelCheck is not directed at children under 13, and we do not knowingly collect any data from children. Because the app collects nothing at all, there is nothing to delete on request — but you can contact us at the address above with any question.
+LabelCheck is not directed at children under 13, and we do not knowingly collect any data from children. Because the app collects nothing at all, there is nothing to delete on request, but you can contact us at the address above with any question.
 
 ## Changes
 

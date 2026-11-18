@@ -16,14 +16,14 @@ Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and sh
 
 No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. The only thing that leaves the phone is the barcode itself, sent to Open Food Facts to fetch that product.
 
-Set up allergen profiles for yourself or your family, and every product card flags matches — on your phone, before you buy.
+Set up allergen profiles for yourself or your family, and every product card flags matches on your phone, before you buy.
 
 No barcode, or product not found? Photograph the ingredients panel and LabelCheck reads it on your phone.
 
 Free: unlimited barcode scans and the full product card, forever.
 Pro: unlimited history, multiple allergen profiles, OCR label explain, and export. $9.99/year or $19.99 once.
 
-Data comes from Open Food Facts, a crowdsourced open database — always check the physical label. General information only: not medical or dietary advice, and not an allergy safety guarantee.
+Data comes from Open Food Facts, a crowdsourced open database. Always check the physical label. General information only: not medical or dietary advice, and not an allergy safety guarantee.
 
 ## Keywords
 
