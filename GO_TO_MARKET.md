@@ -16,8 +16,8 @@ One sentence, one job. The differentiator is not the scan — Yuka does that fre
 ## Launch checklist
 
 1. Real app icon in `Assets.xcassets/AppIcon.appiconset` (done 2026-11-18: white barcode + checkmark on leaf-green accent, 1024 master + all sizes).
-2. Support page live: https://labelcheck.singhsec.com/labelcheck-support
-3. Privacy policy live: https://labelcheck.singhsec.com/labelcheck-privacy (text in `privacy-policy.md`)
+2. Support page live: https://labelcheck.singhsec.com/labelcheck-support (done 2026-11-18, fetched and verified live)
+3. Privacy policy live: https://labelcheck.singhsec.com/labelcheck-privacy (text in `privacy-policy.md`; done 2026-11-18, fetched and verified live)
 4. Apple Developer enrolment ($99) + App Store Connect app created with bundle ID `com.singhsec.labelcheck` (only Aman).
 5. Paid Apps Agreement accepted; Small Business Program applied for (15% commission).
 6. StoreKit products created in App Store Connect: `labelcheck_pro_yearly` $9.99/year, `labelcheck_pro_lifetime` $19.99 (see `SUBSCRIPTION_PLAN.md`).
@@ -35,4 +35,4 @@ One sentence, one job. The differentiator is not the scan — Yuka does that fre
 
 ## What needs Aman (again, in one place)
 
-Apple Developer enrolment ($99, 1–2 days) is the critical path: without it there is no TestFlight and no submission, and nothing else on the checklist can be tested end to end. Start it first. The Hostinger subdomain pages (support + privacy) are second — they must be live before submission, and they need the mailbox/password work already tracked for Clear Days.
+Apple Developer enrolment ($99, 1–2 days) is the critical path: without it there is no TestFlight and no submission, and nothing else on the checklist can be tested end to end. Start it first. The Hostinger subdomain pages (support + privacy) are already live and verified (2026-11-18).

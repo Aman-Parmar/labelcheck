@@ -153,8 +153,8 @@ labelcheck/
     Views/                     # SwiftUI screens: scan, product card, history, allergens,
                                #   OCR result, settings, paywall
   Resources/
-    Assets.xcassets/           # App icon (placeholder — add real icon before submission),
-                               #   accent color
+    Assets.xcassets/           # App icon (real 1024 master + all sizes, white barcode
+                               #   + checkmark on leaf-green accent), accent color
     LabelCheck.storekit        # StoreKit Configuration for sandbox purchase testing
     PrivacyInfo.xcprivacy      # Privacy manifest: no tracking, no collected data
   Tests/                       # Unit tests (LabelCheckTests target)
@@ -173,8 +173,8 @@ These are the steps only Aman can do, because they need his Apple ID, his paymen
 4. App Store Connect API key. In App Store Connect, Users and Access, Integrations, create a key with the App Manager role, download the `.p8` file once, and keep it safe. Apple shows it once and never again. If it is lost, revoke it and create a new one. The base64 form of that file goes into the `APP_STORE_CONNECT_API_KEY_KEY` GitHub secret.
 5. TestFlight on his iPhone. Install the TestFlight app from the App Store, accept the internal tester invite for LabelCheck, and install the build.
 6. App Store listing decisions. App name, subtitle, description, keywords, screenshots, and the privacy policy URL (see `app-store-listing.md`).
-7. Publish the singhsec.com pages. Before App Store submission, put a real support page live at https://labelcheck.singhsec.com/labelcheck-support and the privacy policy live at https://labelcheck.singhsec.com/labelcheck-privacy, and check both URLs open. Apple requires working URLs.
-8. Real app icon. `Assets.xcassets/AppIcon.appiconset` is a placeholder in v1 — a real 1024×1024 icon is needed before submission.
+7. Publish the singhsec.com pages. Done 2026-11-18: support page live at https://labelcheck.singhsec.com/labelcheck-support and privacy policy live at https://labelcheck.singhsec.com/labelcheck-privacy, both fetched and verified.
+8. Real app icon. Done 2026-11-18: real 1024×1024 icon in `Assets.xcassets/AppIcon.appiconset` (white barcode + checkmark on leaf-green accent, all sizes).
 
 ## Costs, Year 1
 
