@@ -49,6 +49,7 @@ struct HistoryView: View {
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(item.displayName)
                                             .font(.headline)
+                                            .foregroundStyle(.primary)
                                         if let brand = item.brand {
                                             Text(brand)
                                                 .font(.subheadline)
@@ -68,6 +69,14 @@ struct HistoryView: View {
                                     }
                                 }
                             }
+                            // Plain style: the default button tint paints the
+                            // whole row accent-blue, which turned the brand
+                            // and date (foregroundStyle .secondary, a
+                            // hierarchical level of the current foreground)
+                            // blue too. Plain keeps the explicit primary /
+                            // secondary styles, so the row reads like a
+                            // normal iOS list row.
+                            .buttonStyle(.plain)
                         }
                         .onDelete(perform: delete)
                         if hiddenCount > 0 {
