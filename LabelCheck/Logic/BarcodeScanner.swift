@@ -15,7 +15,7 @@ struct BarcodeScannerView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> DataScannerViewController {
         let controller = DataScannerViewController(
-            recognizedDataTypes: [.barcode(symbologies: [.ean13, .ean8, .upcE])],
+            recognizedDataTypes: [.barcode(symbologies: [.ean13, .ean8, .upce])],
             qualityLevel: .accurate,
             recognizesMultipleItems: false,
             isHighFrameRateTrackingEnabled: false,
@@ -74,7 +74,7 @@ enum StillImageBarcodeScanner {
                     .compactMap(\.payloadStringValue) ?? []
                 continuation.resume(returning: codes)
             }
-            request.symbologies = [.ean13, .ean8, .upcE]
+            request.symbologies = [.ean13, .ean8, .upce]
             let handler = VNImageRequestHandler(cgImage: image, options: [:])
             do {
                 try handler.perform([request])

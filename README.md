@@ -181,7 +181,7 @@ These are the steps only Aman can do, because they need his Apple ID, his paymen
 | Item | Cost |
 | --- | --- |
 | Apple Developer Program, Individual | $99 per year |
-| GitHub Actions, public repo (free, unlimited minutes) | $0 |
+| GitHub Actions, private repo (2,000 free min/mo; macOS bills 10x) | $0 if usage stays inside the free tier |
 | Open Food Facts API v3 | $0 (no key, rate limits per IP) |
 | Fastlane, XcodeGen | $0, open source |
 | **Total, Year 1** | **About $99** |
