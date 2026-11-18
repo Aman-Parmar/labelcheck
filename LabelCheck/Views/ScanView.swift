@@ -24,7 +24,7 @@ struct ScanView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 20) {
+                VStack(spacing: 16) {
                     cameraCard
                     manualEntry
                     ocrButton
@@ -44,6 +44,15 @@ struct ScanView: View {
             // content margin lets everything scroll fully above it.
             .contentMargins(.bottom, 110, for: .scrollContent)
             .navigationTitle("Scan")
+            // Inline title, not large: the large title pushed the camera
+            // card down so far that the "Scan with camera" button sat
+            // half-hidden behind the floating tab bar at rest — a real
+            // defect, not just a screenshot problem (runs 44247113507
+            // through 44254094663). Inline also removes the large-title
+            // collapse, which ghosted over the card in the 01 captures.
+            // The card's own "Scan any packaged food" heading carries the
+            // screen's identity, so nothing is lost.
+            .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(item: $selectedProduct) { product in
                 ProductView(product: product)
             }
@@ -72,9 +81,9 @@ struct ScanView: View {
     // MARK: - Camera
 
     private var cameraCard: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 10) {
             Image(systemName: "barcode.viewfinder")
-                .font(.system(size: 56))
+                .font(.system(size: 48))
                 .foregroundStyle(Color.accentColor)
                 .accessibilityIdentifier("scan-icon")
             Text("Scan any packaged food")

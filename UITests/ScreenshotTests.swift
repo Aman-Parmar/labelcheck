@@ -24,9 +24,10 @@ final class ScreenshotTests: XCTestCase {
 
     func test01Scan() {
         app.tabBars.buttons["Scan"].tap()
-        // Lift the content ~140pt so the "Scan with camera" button clears
-        // the floating tab bar pill before the capture.
-        nudgeUp()
+        // No scroll: the Scan screen is laid out so the "Scan with camera"
+        // button clears the floating tab bar at rest (inline title + tight
+        // camera card). Scrolling it caused the large-title collapse to
+        // ghost over the card in runs 44250358989 and 44254094663.
         saveScreenshot(named: "01-scan")
     }
 
@@ -56,10 +57,11 @@ final class ScreenshotTests: XCTestCase {
     func test04History() {
         app.tabBars.buttons["History"].tap()
         XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
-        // Flick the list to its bottom so the last seeded row clears the
-        // floating tab bar (a coordinate drag does not scroll a List of
-        // Buttons: the row captures the touch).
-        scrollListToBottom()
+        // No scroll: neither a coordinate drag nor app.swipeUp() moves
+        // these Lists under test (the rows capture the touch / the gesture
+        // is a no-op — 07 came back byte-identical twice). The last row
+        // sitting partly behind the pill is normal list behaviour; the
+        // first two rows are fully visible.
         saveScreenshot(named: "04-history")
     }
 
@@ -88,9 +90,8 @@ final class ScreenshotTests: XCTestCase {
 
     func test07Settings() {
         app.tabBars.buttons["Settings"].tap()
-        // Flick the list to its bottom so the Privacy section text clears
-        // the floating tab bar.
-        scrollListToBottom()
+        // No scroll: see test04History — the List does not move under test
+        // gestures, and the Pro section + Privacy header are fully visible.
         saveScreenshot(named: "07-settings")
     }
 
@@ -120,32 +121,6 @@ final class ScreenshotTests: XCTestCase {
     }
 
     // MARK: - Helper
-
-    /// Drags the content up ~140pt: enough to lift the bottom content clear
-    /// of the iOS 26 floating tab bar pill before a capture. The views now
-    /// carry a 110pt bottom content margin, so the lifted position is real
-    /// scrollable space, not a bounce. The 1.5s settle matters: a 0.5s
-    /// settle caught the scroll mid-deceleration and the collapsing large
-    /// title ghosted over the card (01 in run 44250358989).
-    private func nudgeUp() {
-        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65))
-        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
-        start.press(forDuration: 0.1, thenDragTo: end)
-        Thread.sleep(forTimeInterval: 1.5)
-    }
-
-    /// Flicks a List to its bottom: a coordinate drag does not scroll a
-    /// List whose rows are Buttons (the row captures the touch), so the
-    /// History and Settings shots use a real swipe instead. Ends at the
-    /// max offset, which the 110pt bottom content margin makes enough to
-    /// lift the last rows clear of the floating tab bar pill. Swipe on the
-    /// app element itself, not `tables.firstMatch`: a SwiftUI List exposes
-    /// no Table element in this hierarchy (test04/test07 failed with "No
-    /// matches found" in run 44252395003).
-    private func scrollListToBottom() {
-        app.swipeUp()
-        Thread.sleep(forTimeInterval: 1.5)
-    }
 
     /// Saves the screenshot both as an XCTAttachment (in the xcresult) and
     /// as a PNG in /tmp/labelcheck-screenshots, which CI uploads as an
