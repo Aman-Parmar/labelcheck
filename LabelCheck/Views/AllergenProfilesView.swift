@@ -41,6 +41,10 @@ struct AllergenProfilesView: View {
                         }
                         .onDelete(perform: delete)
                     }
+                    // The iOS 26 floating tab bar overlays scroll content;
+                    // a bottom content margin lets the last row scroll fully
+                    // above the pill.
+                    .contentMargins(.bottom, 110, for: .scrollContent)
                 }
             }
             .navigationTitle("Allergens")
@@ -146,6 +150,9 @@ private struct AddProfileView: View {
         }
         .navigationTitle("New profile")
         .navigationBarTitleDisplayMode(.inline)
+        // Pushed detail screen: hide the floating tab bar, like the
+        // product card and OCR result.
+        .toolbar(.hidden, for: .tabBar)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Cancel") { dismiss() }

@@ -37,6 +37,10 @@ struct ProductView: View {
             }
             .padding()
         }
+        // Detail screens use the full screen: hide the floating tab bar on
+        // push, so the card is never half-hidden behind the pill (the 02
+        // listing shot caught the Nutri-Score section under it).
+        .toolbar(.hidden, for: .tabBar)
         .navigationTitle(product.displayName)
         .navigationBarTitleDisplayMode(.inline)
     }

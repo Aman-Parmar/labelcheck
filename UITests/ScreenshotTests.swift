@@ -24,6 +24,9 @@ final class ScreenshotTests: XCTestCase {
 
     func test01Scan() {
         app.tabBars.buttons["Scan"].tap()
+        // Lift the content ~140pt so the "Scan with camera" button clears
+        // the floating tab bar pill before the capture.
+        nudgeUp()
         saveScreenshot(named: "01-scan")
     }
 
@@ -53,6 +56,8 @@ final class ScreenshotTests: XCTestCase {
     func test04History() {
         app.tabBars.buttons["History"].tap()
         XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        // Lift the list so the last seeded row clears the floating tab bar.
+        nudgeUp()
         saveScreenshot(named: "04-history")
     }
 
@@ -81,6 +86,8 @@ final class ScreenshotTests: XCTestCase {
 
     func test07Settings() {
         app.tabBars.buttons["Settings"].tap()
+        // Lift the list so the Privacy section text clears the floating tab bar.
+        nudgeUp()
         saveScreenshot(named: "07-settings")
     }
 
@@ -110,6 +117,17 @@ final class ScreenshotTests: XCTestCase {
     }
 
     // MARK: - Helper
+
+    /// Drags the content up ~140pt: enough to lift the bottom content clear
+    /// of the iOS 26 floating tab bar pill before a capture. The views now
+    /// carry a 110pt bottom content margin, so the lifted position is real
+    /// scrollable space, not a bounce.
+    private func nudgeUp() {
+        let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65))
+        let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+        start.press(forDuration: 0.1, thenDragTo: end)
+        Thread.sleep(forTimeInterval: 0.5)
+    }
 
     /// Saves the screenshot both as an XCTAttachment (in the xcresult) and
     /// as a PNG in /tmp/labelcheck-screenshots, which CI uploads as an

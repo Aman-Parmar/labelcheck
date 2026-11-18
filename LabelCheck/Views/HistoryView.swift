@@ -75,6 +75,10 @@ struct HistoryView: View {
                             .accessibilityIdentifier("history-pro-upsell")
                         }
                     }
+                    // The iOS 26 floating tab bar overlays scroll content;
+                    // a bottom content margin lets the last row scroll fully
+                    // above the pill.
+                    .contentMargins(.bottom, 110, for: .scrollContent)
                 }
             }
             .navigationTitle("History")

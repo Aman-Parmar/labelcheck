@@ -47,6 +47,10 @@ struct OCRResultView: View {
             }
             .padding()
         }
+        // Detail screen: hide the floating tab bar on push, so the
+        // recognised text is never half-hidden behind the pill (the 05
+        // listing shot caught the last lines under it).
+        .toolbar(.hidden, for: .tabBar)
         .navigationTitle("Label photo")
         .navigationBarTitleDisplayMode(.inline)
     }

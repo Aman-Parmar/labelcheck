@@ -39,6 +39,10 @@ struct ScanView: View {
                 }
                 .padding()
             }
+            // The iOS 26 floating tab bar overlays scroll content, so the
+            // last items could sit half-hidden behind the pill. A bottom
+            // content margin lets everything scroll fully above it.
+            .contentMargins(.bottom, 110, for: .scrollContent)
             .navigationTitle("Scan")
             .navigationDestination(item: $selectedProduct) { product in
                 ProductView(product: product)

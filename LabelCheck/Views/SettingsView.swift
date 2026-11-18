@@ -43,6 +43,9 @@ struct SettingsView: View {
                     .accessibilityIdentifier("restore-purchases-button")
                 }
             }
+            // The iOS 26 floating tab bar overlays scroll content; a bottom
+            // content margin lets the last rows scroll fully above the pill.
+            .contentMargins(.bottom, 110, for: .scrollContent)
             .navigationTitle("Settings")
             .sheet(isPresented: $showingPaywall) {
                 PaywallView()
