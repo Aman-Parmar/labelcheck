@@ -10,7 +10,7 @@ import SwiftData
 /// In screenshot mode:
 /// - `OpenFoodFactsClient` serves the 3 bundled sample products instead of
 ///   the network (see `SampleProducts.json`).
-/// - History is seeded with those 3 products and one allergen profile.
+/// - History is seeded with those 3 products and two allergen profiles.
 /// - The "Read a label photo" button shows the bundled sample OCR text
 ///   instead of opening the photo picker.
 ///
@@ -80,6 +80,14 @@ enum ScreenshotSeeder {
         modelContext.insert(AllergenProfile(
             name: "Maya",
             allergens: ["milk", "tree-nut", "peanut"],
+            isActive: true
+        ))
+        // A second profile so the 03-allergens listing shot shows the list
+        // as a list, not one card in a lot of empty space. "Sam" is not
+        // used here: test08 adds a profile called Sam.
+        modelContext.insert(AllergenProfile(
+            name: "Leo",
+            allergens: ["gluten", "sesame"],
             isActive: true
         ))
         try? modelContext.save()

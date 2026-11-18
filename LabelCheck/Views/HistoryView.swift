@@ -1,5 +1,6 @@
 import SwiftData
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// History: scanned products, on-device only. Free shows the most recent 10;
 /// Pro shows unlimited history. No account, no sync, no server.
@@ -12,6 +13,7 @@ struct HistoryView: View {
 
     @State private var selectedProduct: FoodProduct?
     @State private var showingPaywall = false
+    @State private var showingExporter = false
 
     private static let freeHistoryLimit = 10
 
@@ -91,6 +93,18 @@ struct HistoryView: View {
             .toolbar {
                 if !scanned.isEmpty {
                     ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            if store.isPro {
+                                showingExporter = true
+                            } else {
+                                showingPaywall = true
+                            }
+                        } label: {
+                            Image(systemName: "square.and.arrow.up")
+                        }
+                        .accessibilityIdentifier("history-export-button")
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
                         Button("Clear") {
                             for item in scanned { modelContext.delete(item) }
                             try? modelContext.save()
@@ -99,6 +113,14 @@ struct HistoryView: View {
                     }
                 }
             }
+            // CSV export, Pro only. The system share/save sheet writes the
+            // file where the user chooses; nothing is uploaded anywhere.
+            .fileExporter(
+                isPresented: $showingExporter,
+                document: HistoryCSVDocument(csv: HistoryCSV.csv(for: scanned)),
+                contentType: .commaSeparatedText,
+                defaultFilename: "labelcheck-history.csv"
+            ) { _ in }
         }
     }
 

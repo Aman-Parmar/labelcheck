@@ -121,6 +121,18 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Sam"].waitForExistence(timeout: 10))
     }
 
+    // MARK: - 09 Export gating (no screenshot)
+
+    /// History export is Pro-only: in screenshot mode the store is not Pro,
+    /// so tapping Export must open the paywall instead of the system share
+    /// sheet. The CSV text itself is covered by HistoryCSVTests.
+    func test09ExportGating() {
+        app.tabBars.buttons["History"].tap()
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        app.buttons["history-export-button"].tap()
+        XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
+    }
+
     // MARK: - Helper
 
     /// Saves the screenshot both as an XCTAttachment (in the xcresult) and

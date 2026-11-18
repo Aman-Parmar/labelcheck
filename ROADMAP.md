@@ -6,7 +6,7 @@
 - Product card: name, brand, Nutri-Score, NOVA, allergens, ingredients, nutriments per 100 g, "verify on the physical label" states, source attribution + disclaimer
 - Allergen profiles: create profiles, on-device matching, match banner on the product card (first profile free, multiple profiles Pro)
 - OCR fallback: photograph an ingredients panel, on-device Vision OCR + Natural Language allergen extraction, user confirms matches
-- History: SwiftData on-device (free: most recent 10; Pro: unlimited), delete/clear
+- History: SwiftData on-device (free: most recent 10; Pro: unlimited), delete/clear, CSV export (Pro, via the system share sheet)
 - Plain-English label explain: deterministic card from product data; Foundation Models (iOS 26+, gated) as an enhancement
 - Paywall: StoreKit 2, $9.99/year + $19.99 lifetime, one Pro entitlement
 - Settings: privacy, attribution, support/privacy links, restore purchases
@@ -16,7 +16,6 @@
 ## v1.1 (after TestFlight feedback — only what real users ask for)
 
 - Shareable product card (image export of a scanned product, no account, no feed)
-- History export (CSV) — a Pro feature, already promised by the paywall copy
 - Barcode scan history search
 - Localised allergen names for the most common non-English label languages, if users ask
 
