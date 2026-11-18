@@ -1,0 +1,23 @@
+# XcodeGen generated project (regenerate with `xcodegen generate`)
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+*.xcuserstate
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+# Swift Package Manager
+.build/
+.swiftpm/
+# macOS
+.DS_Store
+# App Store Connect / signing (never commit)
+*.p8
+*.pem
+.env
+*.p12
+*.mobileprovision
+*.provisionprofile

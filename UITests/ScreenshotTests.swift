@@ -1,0 +1,99 @@
+import XCTest
+
+/// App Store screenshot lane — 7 shots on the iPhone 17 Pro Max simulator.
+/// Real simulator screenshots of the real app, never mockups. The app runs
+/// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
+/// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
+/// bundled sample label text. No network, fully deterministic.
+///
+/// CI runs this lane in parallel with the unit-test lane (see
+/// .github/workflows/ios.yml) and uploads the PNGs as an artifact.
+/// After a run, check framing: scan button, Nutri-Score badge and allergen
+/// banner fully visible in each shot, no clipping.
+final class ScreenshotTests: XCTestCase {
+    private var app: XCUIApplication!
+
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+        app = XCUIApplication()
+        app.launchArguments = ["--screenshot-mode"]
+        app.launch()
+    }
+
+    // MARK: - 01 Scan
+
+    func test01Scan() {
+        app.tabBars.buttons["Scan"].tap()
+        saveScreenshot(named: "01-scan")
+    }
+
+    // MARK: - 02 Product card
+
+    func test02ProductCard() {
+        app.tabBars.buttons["Scan"].tap()
+        let field = app.textFields["manual-barcode-field"]
+        field.tap()
+        field.typeText("3017620422003")
+        app.buttons["manual-lookup-button"].tap()
+        let productName = app.staticTexts["product-name"]
+        XCTAssertTrue(productName.waitForExistence(timeout: 10))
+        saveScreenshot(named: "02-product-card")
+    }
+
+    // MARK: - 03 Allergens
+
+    func test03Allergens() {
+        app.tabBars.buttons["Allergens"].tap()
+        XCTAssertTrue(app.staticTexts["Maya"].waitForExistence(timeout: 10))
+        saveScreenshot(named: "03-allergens")
+    }
+
+    // MARK: - 04 History
+
+    func test04History() {
+        app.tabBars.buttons["History"].tap()
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        saveScreenshot(named: "04-history")
+    }
+
+    // MARK: - 05 OCR fallback
+
+    func test05OCRFallback() {
+        app.tabBars.buttons["Scan"].tap()
+        app.buttons["ocr-sample-button"].tap()
+        XCTAssertTrue(app.staticTexts["ocr-text"].waitForExistence(timeout: 10))
+        saveScreenshot(named: "05-ocr-fallback")
+    }
+
+    // MARK: - 06 Paywall
+
+    func test06Paywall() {
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["settings-get-pro-button"].tap()
+        XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
+        saveScreenshot(named: "06-paywall")
+    }
+
+    // MARK: - 07 Settings
+
+    func test07Settings() {
+        app.tabBars.buttons["Settings"].tap()
+        saveScreenshot(named: "07-settings")
+    }
+
+    // MARK: - Helper
+
+    /// Saves the screenshot both as an XCTAttachment (in the xcresult) and
+    /// as a PNG in /tmp/labelcheck-screenshots, which CI uploads as an
+    /// artifact. The simulator shares the host /tmp, so this path works.
+    private func saveScreenshot(named name: String) {
+        let screenshot = XCUIScreen.main.screenshot()
+        let attachment = XCTAttachment(screenshot: screenshot)
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+        let dir = URL(fileURLWithPath: "/tmp/labelcheck-screenshots", isDirectory: true)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        try? screenshot.pngRepresentation.write(to: dir.appendingPathComponent("\(name).png"))
+    }
+}

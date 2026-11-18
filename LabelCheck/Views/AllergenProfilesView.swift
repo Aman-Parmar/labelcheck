@@ -1,0 +1,161 @@
+import SwiftData
+import SwiftUI
+
+/// Allergen profiles: named sets of allergens matched on-device against every
+/// product card. Multiple profiles is a Pro feature; the first profile is free.
+/// A match is a warning to check the physical label, never a safety guarantee.
+struct AllergenProfilesView: View {
+    @EnvironmentObject private var store: StoreManager
+    @Environment(\.modelContext) private var modelContext
+
+    @Query(sort: \AllergenProfile.createdAt)
+    private var profiles: [AllergenProfile]
+
+    @State private var showingAdd = false
+    @State private var showingPaywall = false
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if profiles.isEmpty {
+                    emptyState
+                } else {
+                    List {
+                        ForEach(profiles) { profile in
+                            VStack(alignment: .leading, spacing: 4) {
+                                HStack {
+                                    Text(profile.name)
+                                        .font(.headline)
+                                    Spacer()
+                                    Toggle("", isOn: Binding(
+                                        get: { profile.isActive },
+                                        set: { profile.isActive = $0 }
+                                    ))
+                                    .labelsHidden()
+                                    .accessibilityIdentifier("profile-toggle-\(profile.name)")
+                                }
+                                Text(profile.allergenList.compactMap(AllergenMatcher.label(forKey:)).joined(separator: ", "))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        .onDelete(perform: delete)
+                    }
+                }
+            }
+            .navigationTitle("Allergens")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        if profiles.isEmpty || store.isPro {
+                            showingAdd = true
+                        } else {
+                            showingPaywall = true
+                        }
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .accessibilityIdentifier("add-profile-button")
+                }
+            }
+            .sheet(isPresented: $showingAdd) {
+                AddProfileView()
+            }
+            .sheet(isPresented: $showingPaywall) {
+                PaywallView()
+            }
+        }
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.shield")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary)
+            Text("No allergen profiles yet")
+                .font(.title3.bold())
+            Text("Add a profile — for example, milk and peanut — and every product card will flag matches. Matching happens on this phone.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+            Button("Add a profile") {
+                showingAdd = true
+            }
+            .buttonStyle(.borderedProminent)
+            .accessibilityIdentifier("add-profile-empty-button")
+        }
+        .padding()
+    }
+
+    private func delete(at offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(profiles[index])
+        }
+        try? modelContext.save()
+    }
+}
+
+private struct AddProfileView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+
+    @State private var name = ""
+    @State private var selected: Set<String> = []
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Name") {
+                    TextField("Whose profile is this?", text: $name)
+                        .accessibilityIdentifier("profile-name-field")
+                }
+                Section("Allergens to watch for") {
+                    ForEach(AllergenMatcher.allLabels, id: \.self) { label in
+                        Button {
+                            if selected.contains(label) {
+                                selected.remove(label)
+                            } else {
+                                selected.insert(label)
+                            }
+                        } label: {
+                            HStack {
+                                Text(label)
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                if selected.contains(label) {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                        .accessibilityIdentifier("allergen-option-\(label)")
+                    }
+                }
+                Section {
+                    Text("Matches are warnings to check the physical label. This is not an allergy safety guarantee.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            .navigationTitle("New profile")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let keys = selected.compactMap(AllergenMatcher.key(forLabel:))
+                        modelContext.insert(AllergenProfile(
+                            name: name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "My profile" : name,
+                            allergens: keys
+                        ))
+                        try? modelContext.save()
+                        dismiss()
+                    }
+                    .disabled(selected.isEmpty)
+                    .accessibilityIdentifier("save-profile-button")
+                }
+            }
+        }
+    }
+}

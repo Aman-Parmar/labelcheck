@@ -1,0 +1,122 @@
+import SwiftData
+import SwiftUI
+
+/// History: scanned products, on-device only. Free shows the most recent 10;
+/// Pro shows unlimited history. No account, no sync, no server.
+struct HistoryView: View {
+    @EnvironmentObject private var store: StoreManager
+    @Environment(\.modelContext) private var modelContext
+
+    @Query(sort: \ScannedProduct.scannedAt, order: .reverse)
+    private var scanned: [ScannedProduct]
+
+    @State private var selectedProduct: FoodProduct?
+    @State private var showingPaywall = false
+
+    private static let freeHistoryLimit = 10
+
+    private var visibleItems: [ScannedProduct] {
+        store.isPro ? scanned : Array(scanned.prefix(Self.freeHistoryLimit))
+    }
+
+    private var hiddenCount: Int {
+        max(0, scanned.count - visibleItems.count)
+    }
+
+    var body: some View {
+        NavigationStack {
+            Group {
+                if scanned.isEmpty {
+                    emptyState
+                } else {
+                    List {
+                        ForEach(visibleItems) { item in
+                            Button {
+                                selectedProduct = FoodProduct(
+                                    barcode: item.barcode,
+                                    name: item.name,
+                                    brand: item.brand,
+                                    nutriScoreGrade: item.nutriScoreGrade,
+                                    novaGroup: item.novaGroup,
+                                    allergenTags: item.allergenList
+                                        .compactMap(AllergenMatcher.key(forLabel:))
+                                        .map { "en:\($0)" }
+                                )
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(item.displayName)
+                                            .font(.headline)
+                                        if let brand = item.brand {
+                                            Text(brand)
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Text(item.scannedAt.formatted(date: .abbreviated, time: .shortened))
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    if let letter = NutriScore(grade: item.nutriScoreGrade ?? "").badgeLetter {
+                                        Text(letter)
+                                            .font(.headline.bold())
+                                            .foregroundStyle(.white)
+                                            .frame(width: 32, height: 32)
+                                            .background(Color.gray, in: Circle())
+                                    }
+                                }
+                            }
+                        }
+                        .onDelete(perform: delete)
+                        if hiddenCount > 0 {
+                            Button("See all \(scanned.count) scans with Pro") {
+                                showingPaywall = true
+                            }
+                            .accessibilityIdentifier("history-pro-upsell")
+                        }
+                    }
+                }
+            }
+            .navigationTitle("History")
+            .navigationDestination(item: $selectedProduct) { product in
+                ProductView(product: product)
+            }
+            .sheet(isPresented: $showingPaywall) {
+                PaywallView()
+            }
+            .toolbar {
+                if !scanned.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Clear") {
+                            for item in scanned { modelContext.delete(item) }
+                            try? modelContext.save()
+                        }
+                        .accessibilityIdentifier("history-clear-button")
+                    }
+                }
+            }
+        }
+    }
+
+    private var emptyState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "clock.arrow.circlepath")
+                .font(.system(size: 48))
+                .foregroundStyle(.secondary)
+            Text("No scans yet")
+                .font(.title3.bold())
+            Text("Scan a barcode and it will show up here, on this phone only.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+    }
+
+    private func delete(at offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(visibleItems[index])
+        }
+        try? modelContext.save()
+    }
+}
