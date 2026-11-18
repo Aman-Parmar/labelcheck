@@ -9,11 +9,11 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 - `concurrency: cancel-in-progress: true` on the ref, so a batch of pushes costs one run, not one run per push.
 - Cache Homebrew installs + SPM/DerivedData. The repo is public (flipped back from private by Aman 2026-11-17 ~23:21 ET): public repos get free unlimited Actions minutes, including macOS. Optimise for wall-clock, but keep the lanes lean anyway.
 - Batch independent low-risk changes into **one commit / one CI cycle**. Do not push tiny commits that each trigger a full run.
-- Wait for CI in the same run where possible (`gh run watch`) — do not leave verification to the next run.
+- Wait for CI in the same run where possible — do not leave verification to the next run. Slow poll only: one `gh run view` per check, sleep at least 180 seconds between checks, at most ~8 checks. NEVER use `gh run watch` — it polls every 3 seconds and exhausts the GitHub API rate limit (403), blocking ALL gh calls for about an hour (hit 2026-11-18). If any gh call returns a 403 rate limit, STOP all gh calls immediately and wait for the window to reset; do not retry in a loop.
 
 ## 2. Screenshots — real, never mockups
 
-- 8-shot lane on the iPhone 17 Pro Max simulator: 01-scan, 02-product card, 03-allergens, 04-history, 05-OCR fallback, 06-paywall, 07-settings, 08-alternatives (`UITests/ScreenshotTests.swift`). 08 added 2026-11-18 with LC-1 (alternatives section sits below the fold on the card, so it gets its own shot).
+- 9-shot lane on the iPhone 17 Pro Max simulator: 01-scan, 02-product card, 03-allergens, 04-history, 05-OCR fallback, 06-paywall, 07-settings, 08-alternatives, 09-search (`UITests/ScreenshotTests.swift`). 08 added 2026-11-18 with LC-1 (alternatives section sits below the fold on the card, so it gets its own shot); 09 added 2026-11-18 with LC-3 (search-by-name results).
 - Screenshot-mode sample data only: a fixed set of 3 known Open Food Facts barcodes/products with bundled sample JSON (`LabelCheck/SampleData/SampleProducts.json`), so screenshots are deterministic and offline. Never mockups, never Figma.
 - Every future update comes with real simulator screenshots from CI.
 - Verify framing after every run: scan button, Nutri-Score badge, and allergen banner fully visible in each shot, no clipping.
