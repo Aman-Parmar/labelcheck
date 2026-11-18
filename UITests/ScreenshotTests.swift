@@ -56,8 +56,10 @@ final class ScreenshotTests: XCTestCase {
     func test04History() {
         app.tabBars.buttons["History"].tap()
         XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
-        // Lift the list so the last seeded row clears the floating tab bar.
-        nudgeUp()
+        // Flick the list to its bottom so the last seeded row clears the
+        // floating tab bar (a coordinate drag does not scroll a List of
+        // Buttons: the row captures the touch).
+        scrollListToBottom()
         saveScreenshot(named: "04-history")
     }
 
@@ -86,8 +88,9 @@ final class ScreenshotTests: XCTestCase {
 
     func test07Settings() {
         app.tabBars.buttons["Settings"].tap()
-        // Lift the list so the Privacy section text clears the floating tab bar.
-        nudgeUp()
+        // Flick the list to its bottom so the Privacy section text clears
+        // the floating tab bar.
+        scrollListToBottom()
         saveScreenshot(named: "07-settings")
     }
 
@@ -121,12 +124,24 @@ final class ScreenshotTests: XCTestCase {
     /// Drags the content up ~140pt: enough to lift the bottom content clear
     /// of the iOS 26 floating tab bar pill before a capture. The views now
     /// carry a 110pt bottom content margin, so the lifted position is real
-    /// scrollable space, not a bounce.
+    /// scrollable space, not a bounce. The 1.5s settle matters: a 0.5s
+    /// settle caught the scroll mid-deceleration and the collapsing large
+    /// title ghosted over the card (01 in run 44250358989).
     private func nudgeUp() {
         let start = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.65))
         let end = app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
         start.press(forDuration: 0.1, thenDragTo: end)
-        Thread.sleep(forTimeInterval: 0.5)
+        Thread.sleep(forTimeInterval: 1.5)
+    }
+
+    /// Flicks a List to its bottom: a coordinate drag does not scroll a
+    /// List whose rows are Buttons (the row captures the touch), so the
+    /// History and Settings shots use a real swipe instead. Ends at the
+    /// max offset, which the 110pt bottom content margin makes enough to
+    /// lift the last rows clear of the floating tab bar pill.
+    private func scrollListToBottom() {
+        app.tables.firstMatch.swipeUp()
+        Thread.sleep(forTimeInterval: 1.5)
     }
 
     /// Saves the screenshot both as an XCTAttachment (in the xcresult) and
