@@ -15,7 +15,6 @@ struct ScanView: View {
     @State private var showingScanner = false
     @State private var photoItem: PhotosPickerItem?
     @State private var ocrText: String?
-    @State private var showingOCR = false
 
     enum ScanStatus: Equatable {
         case notFound(String)
@@ -43,6 +42,16 @@ struct ScanView: View {
             .navigationTitle("Scan")
             .navigationDestination(item: $selectedProduct) { product in
                 ProductView(product: product)
+            }
+            // The OCR result is a navigation push, not a sheet. The sheet
+            // never presented in CI (runs 44238639541, 44240348390: the tap
+            // on the sample button succeeded yet the OCR view's strings
+            // never appeared anywhere in the app log) — first as a second
+            // .sheet on the NavigationStack, then attached to the button
+            // view. A push uses the same mechanism as the product card,
+            // which test02 proves works from this exact view.
+            .navigationDestination(item: $ocrText) { text in
+                OCRResultView(text: text)
             }
             .sheet(isPresented: $showingScanner) {
                 scannerSheet
@@ -128,7 +137,6 @@ struct ScanView: View {
             if ScreenshotMode.isEnabled {
                 Button("Read a label photo (sample)") {
                     ocrText = SampleProducts.ocrSampleText
-                    showingOCR = true
                 }
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("ocr-sample-button")
@@ -144,15 +152,6 @@ struct ScanView: View {
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        // The OCR sheet lives here, on this view — not on the NavigationStack
-        // next to the scanner sheet. Two .sheet modifiers on the same view
-        // conflict: only one of them ever presents, and the OCR one was the
-        // dead one (test05 tapped the sample button and no sheet appeared).
-        .sheet(isPresented: $showingOCR) {
-            if let ocrText {
-                OCRResultView(text: ocrText)
-            }
-        }
     }
 
     private func runOCR(on item: PhotosPickerItem) async {
@@ -162,7 +161,6 @@ struct ScanView: View {
         else { return }
         do {
             ocrText = try await OCRService.recogniseText(in: cgImage)
-            showingOCR = true
         } catch {
             status = .error("Could not read that photo. Try again with the label flat and well lit.")
         }
