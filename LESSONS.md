@@ -7,7 +7,7 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 - Linux job first (cheap lint + Foundation-only logic tests), then the macOS test lane and the macOS screenshots lane **in parallel**, both gated on Linux. Archive job after both, only if signing secrets exist, otherwise it exits cleanly — a missing secret is never a red build.
 - Docs-only pushes skip CI (`paths-ignore: **.md, docs/**`).
 - `concurrency: cancel-in-progress: true` on the ref, so a batch of pushes costs one run, not one run per push.
-- Cache Homebrew installs + SPM/DerivedData. The repo is private (flipped from public by Aman 2026-11-17): 2,000 free Actions minutes/month, macOS at 10x — optimise for wall-clock, but watch the usage page and keep the lanes lean.
+- Cache Homebrew installs + SPM/DerivedData. The repo is public (flipped back from private by Aman 2026-11-17 ~23:21 ET): public repos get free unlimited Actions minutes, including macOS. Optimise for wall-clock, but keep the lanes lean anyway.
 - Batch independent low-risk changes into **one commit / one CI cycle**. Do not push tiny commits that each trigger a full run.
 - Wait for CI in the same run where possible (`gh run watch`) — do not leave verification to the next run.
 
