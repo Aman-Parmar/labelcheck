@@ -15,7 +15,6 @@
 
 ## v1.1 (after TestFlight feedback — only what real users ask for)
 
-- Real app icon (placeholder in v1 — required before submission)
 - Shareable product card (image export of a scanned product, no account, no feed)
 - History export (CSV) — a Pro feature, already promised by the paywall copy
 - Barcode scan history search
