@@ -29,10 +29,9 @@
 # changes into ONE commit / CI cycle; do not push tiny commits that each
 # trigger a full run.
 #
-# Private repo (flipped from public by Aman 2026-11-17): 2,000 free Actions
-# minutes/month, macOS bills at 10x, so this pipeline still optimises for
-# wall-clock but watch the Actions usage page — a full push-to-main run
-# costs roughly 15-25 macOS minutes across the parallel lanes.
+# Public repo (flipped back to public by Aman 2026-11-17): Actions minutes
+# are free and unlimited, so this pipeline optimises for wall-clock. A full
+# push-to-main run costs roughly 15-25 macOS minutes across the parallel lanes.
 #
 # Secrets required (placeholders only, never put real values in this file):
 #   APP_STORE_CONNECT_API_KEY_ID        - App Store Connect API key ID

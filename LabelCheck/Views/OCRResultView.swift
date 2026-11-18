@@ -20,6 +20,7 @@ struct OCRResultView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Allergens found in this label")
                             .font(.headline)
+                            .accessibilityIdentifier("ocr-allergens")
                         if foundAllergens.isEmpty {
                             Text("No listed allergens recognised in this text. OCR can miss things — always check the physical label.")
                                 .font(.subheadline)
@@ -34,14 +35,13 @@ struct OCRResultView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
-                    .accessibilityIdentifier("ocr-allergens")
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Recognised text")
                             .font(.headline)
                         Text(text.isEmpty ? "No text recognised. Try again with the label flat and well lit." : text)
                             .font(.subheadline)
+                            .accessibilityIdentifier("ocr-text")
                     }
-                    .accessibilityIdentifier("ocr-text")
                 }
                 .padding()
             }
