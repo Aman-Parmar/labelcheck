@@ -222,13 +222,7 @@ struct ScanView: View {
                             }
                         }
                         Spacer()
-                        if let letter = NutriScore(grade: product.nutriScoreGrade ?? "").badgeLetter {
-                            Text(letter)
-                                .font(.headline.bold())
-                                .foregroundStyle(.white)
-                                .frame(width: 32, height: 32)
-                                .background(nutriScoreColor(letter), in: Circle())
-                        }
+                        NutriScoreBadge(grade: product.nutriScoreGrade, size: 32, font: .headline.bold())
                     }
                     .padding(.vertical, 8)
                 }

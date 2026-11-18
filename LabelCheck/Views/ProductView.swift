@@ -112,13 +112,9 @@ struct ProductView: View {
     private var scoresSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 16) {
-                if let letter = NutriScore(grade: product.nutriScoreGrade ?? "").badgeLetter {
+                if NutriScore(grade: product.nutriScoreGrade ?? "").badgeLetter != nil {
                     VStack {
-                        Text(letter)
-                            .font(.largeTitle.bold())
-                            .foregroundStyle(.white)
-                            .frame(width: 56, height: 56)
-                            .background(nutriScoreColor(letter), in: Circle())
+                        NutriScoreBadge(grade: product.nutriScoreGrade, size: 56, font: .largeTitle.bold())
                             .accessibilityIdentifier("nutriscore-badge")
                         Text("Nutri-Score")
                             .font(.caption)
@@ -235,13 +231,7 @@ struct ProductView: View {
                                     selectedAlternative = alternative
                                 } label: {
                                     HStack(spacing: 12) {
-                                        if let letter = NutriScore(grade: alternative.nutriScoreGrade ?? "").badgeLetter {
-                                            Text(letter)
-                                                .font(.headline.bold())
-                                                .foregroundStyle(.white)
-                                                .frame(width: 36, height: 36)
-                                                .background(nutriScoreColor(letter), in: Circle())
-                                        }
+                                        NutriScoreBadge(grade: alternative.nutriScoreGrade, size: 36, font: .headline.bold())
                                         VStack(alignment: .leading, spacing: 2) {
                                             Text(alternative.displayName)
                                                 .font(.subheadline.bold())

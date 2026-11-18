@@ -13,3 +13,23 @@ func nutriScoreColor(_ letter: String) -> Color {
     default: return .gray
     }
 }
+
+/// One shared Nutri-Score badge: the grade letter in a coloured circle.
+/// Renders nothing when the grade is unknown, so callers never repeat the
+/// letter-or-nothing check. Size and font are parameters because the product
+/// card shows a large badge and the rows show a small one.
+struct NutriScoreBadge: View {
+    let grade: String?
+    let size: CGFloat
+    let font: Font
+
+    var body: some View {
+        if let letter = NutriScore(grade: grade ?? "").badgeLetter {
+            Text(letter)
+                .font(font)
+                .foregroundStyle(.white)
+                .frame(width: size, height: size)
+                .background(nutriScoreColor(letter), in: Circle())
+        }
+    }
+}
