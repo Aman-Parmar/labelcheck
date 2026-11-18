@@ -72,6 +72,18 @@ enum SampleProducts {
             FoodProduct(dto: $0.product, barcode: $0.barcode)
         } ?? []
     }
+
+    /// Sample search results (LC-3): bundled products whose name or
+    /// brand contains the query, case-insensitive. Screenshot mode only;
+    /// the live app searches Open Food Facts instead.
+    static func search(query: String) -> [FoodProduct] {
+        let needle = query.lowercased()
+        guard !needle.isEmpty else { return [] }
+        return all.filter { product in
+            product.displayName.lowercased().contains(needle)
+                || (product.displayBrand?.lowercased().contains(needle) ?? false)
+        }
+    }
 }
 
 /// Seeds SwiftData with the sample products and one sample allergen profile,

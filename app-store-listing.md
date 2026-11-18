@@ -14,7 +14,7 @@ Scan any packaged food, know what's in it in 2 seconds, privately.
 
 Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g.
 
-No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. The only things that leave the phone are the barcode you scan, sent to Open Food Facts to fetch that product, and, on a product with Nutri-Score D or E, that product's category, sent to fetch same-category products with a higher Nutri-Score.
+No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. The only things that leave the phone are the barcode you scan, sent to Open Food Facts to fetch that product, and, on a product with Nutri-Score D or E, that product's category, sent to fetch same-category products with a higher Nutri-Score. With Pro, the words you type in search are also sent to Open Food Facts to find matching products.
 
 Set up allergen profiles for yourself or your family, and every product card flags matches on your phone, before you buy.
 
@@ -23,7 +23,7 @@ Once you have scanned a product, you can open it again with no signal: the full 
 No barcode, or product not found? Photograph the ingredients panel and LabelCheck reads it on your phone.
 
 Free: unlimited barcode scans and the full product card, forever.
-Pro: unlimited history, multiple allergen profiles, OCR label explain, and export. $9.99/year or $19.99 once.
+Pro: unlimited history, multiple allergen profiles, OCR label explain, search by product name, and export. $9.99/year or $19.99 once.
 
 Data comes from Open Food Facts, a crowdsourced open database. Always check the physical label. General information only: not medical or dietary advice, and not an allergy safety guarantee.
 
@@ -37,7 +37,7 @@ barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, foo
 
 Food & Drink (primary), Health & Fitness (secondary — only if review allows; the app gives general information, not health advice)
 
-## Screenshots (8, from the CI lane)
+## Screenshots (9, from the CI lane)
 
 1. 01-scan — Scan tab
 2. 02-product-card — Nutella product card with Nutri-Score badge
@@ -47,6 +47,7 @@ Food & Drink (primary), Health & Fitness (secondary — only if review allows; t
 6. 06-paywall — LabelCheck Pro
 7. 07-settings — Settings and privacy
 8. 08-alternatives — Higher Nutri-Score alternatives on the Nutella card
+9. 09-search — Search by product name, Pro feature
 
 ## Support URL
 

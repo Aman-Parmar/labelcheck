@@ -89,7 +89,7 @@ targets:
         GENERATE_INFOPLIST_FILE: YES
   # App Store screenshots. A UI test target, not a unit test target: it
   # launches the real app in screenshot mode (bundled sample data, no
-  # network) and captures the eight screens. Runs only in the screenshots
+  # network) and captures the nine screens. Runs only in the screenshots
   # lane, never in the everyday test lane, because simulator screenshots
   # cost macOS minutes.
   LabelCheckUITests:

@@ -18,7 +18,7 @@ A native iOS food-label scanner. Scan a barcode, get the product card: name, bra
 - OCR fallback: photograph an ingredients panel when the barcode is not in the database; allergens are extracted on-device and you confirm them
 - History: every scan saved on the phone (free shows the most recent 10, Pro unlimited)
 - Plain-English label explain: a deterministic card built from the product's own data; on iPhone 15 Pro+ with Apple Intelligence (iOS 26) an on-device model can also explain it
-- Pro (paid): unlimited history, multiple allergen profiles, OCR label explain, export
+- Pro (paid): unlimited history, multiple allergen profiles, OCR label explain, search by product name, export
 
 ## What it deliberately does not do
 
@@ -41,7 +41,7 @@ Notes on pricing (see `SUBSCRIPTION_PLAN.md` and `VALIDATION.md`):
 
 ## Data source and honesty
 
-- Product data comes from Open Food Facts (world.openfoodfacts.org), API v3, no key, ODbL licensed. Only the scanned barcode is sent, to fetch that product. On a D/E product card the app also sends that product's category to fetch same-category products with a higher Nutri-Score.
+- Product data comes from Open Food Facts (world.openfoodfacts.org), API v3, no key, ODbL licensed. Only the scanned barcode is sent, to fetch that product. On a D/E product card the app also sends that product's category to fetch same-category products with a higher Nutri-Score. With Pro, the words typed in a name search are also sent, to find matching products.
 - Open Food Facts is crowdsourced. It can be incomplete or out of date. The app shows a "verify on the physical label" state on every product card and never auto-trusts the data.
 - Nutri-Score and NOVA are shown as general information from Open Food Facts, with the disclaimer: general information only, not medical or dietary advice, not an allergy safety guarantee. Always check the physical label and check with a doctor about dietary questions. This is the Guideline 1.4.1 risk mitigation (see `VALIDATION.md`).
 
@@ -119,7 +119,7 @@ Or press Cmd-U in Xcode. Unit tests live in `Tests/` and cover Open Food Facts p
 
 ### 7. Screenshots
 
-The screenshot lane is a UI test target (`UITests/ScreenshotTests.swift`). It launches the app in `--screenshot-mode` (bundled sample data, no network) and captures eight shots on the iPhone 17 Pro Max simulator. In CI it runs in parallel with the unit tests; locally:
+The screenshot lane is a UI test target (`UITests/ScreenshotTests.swift`). It launches the app in `--screenshot-mode` (bundled sample data, no network) and captures nine shots on the iPhone 17 Pro Max simulator. In CI it runs in parallel with the unit tests; locally:
 
 ```bash
 xcodebuild test \

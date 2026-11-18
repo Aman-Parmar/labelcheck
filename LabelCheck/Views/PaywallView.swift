@@ -25,6 +25,7 @@ struct PaywallView: View {
                         FeatureRow(icon: "clock.arrow.circlepath", text: "Unlimited scan history")
                         FeatureRow(icon: "exclamationmark.shield", text: "Multiple allergen profiles")
                         FeatureRow(icon: "text.viewfinder", text: "OCR label explain")
+                        FeatureRow(icon: "magnifyingglass", text: "Search products by name")
                         FeatureRow(icon: "square.and.arrow.up", text: "Export your history")
                     }
                     Text("Free keeps unlimited barcode scans and the full product card, forever. No ads, no account, no tracking either way.")

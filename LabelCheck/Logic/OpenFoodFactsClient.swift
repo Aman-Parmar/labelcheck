@@ -3,11 +3,13 @@ import Foundation
 /// Open Food Facts API v3 client. No API key, no account.
 /// Product lookup: GET https://world.openfoodfacts.org/api/v3/product/{barcode}.json
 /// Category search (LC-1 alternatives): GET https://world.openfoodfacts.org/cgi/search.pl
+/// Name search (LC-3): same search endpoint, `search_terms` instead of a category tag.
 /// User-Agent: LabelCheck/1.0 (aman@threatrepel.com)
 /// Rate limits (per IP): 15 product reads/min, 10 searches/min.
-/// Only the scanned barcode (lookup) or the product's category tag
-/// (alternatives search) is ever sent. No name, email, location, or
-/// device identifier is sent with either call.
+/// Only the scanned barcode (lookup), the product's category tag
+/// (alternatives search), or the words the user typed (name search) is
+/// ever sent. No name, email, location, or device identifier is sent
+/// with any call.
 /// Results are cached in memory so a re-scan never re-hits the network,
 /// and persisted in SwiftData (LC-2) so a re-scan or a History tap works
 /// with no signal at all. The persistent store is set by the view layer
@@ -20,6 +22,9 @@ actor OpenFoodFactsClient {
     static let userAgent = "LabelCheck/1.0 (aman@threatrepel.com)"
     static let baseURL = URL(string: "https://world.openfoodfacts.org/api/v3/product")!
     static let searchURL = URL(string: "https://world.openfoodfacts.org/cgi/search.pl")!
+    /// Fields requested on every search, lookup and alternatives alike:
+    /// everything the product card shows, plus the barcode itself.
+    static let productFields = "code,product_name,brands,nutriscore_grade,nova_group,allergens_tags,ingredients_text,nutriments,image_url,categories_tags"
 
     /// Set to true only in screenshot mode (UITests), where lookups are
     /// served from bundled sample JSON so screenshots are deterministic
@@ -76,19 +81,30 @@ actor OpenFoodFactsClient {
         return found
     }
 
-    /// One category search against `cgi/search.pl`. Returns the raw
-    /// products (unfiltered); the caller applies the grade cut.
-    private func searchCategory(_ category: String) async throws -> [FoodProduct] {
-        var components = URLComponents(url: Self.searchURL, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
-            URLQueryItem(name: "action", value: "process"),
-            URLQueryItem(name: "tagtype_0", value: "categories"),
-            URLQueryItem(name: "tag_contains_0", value: "contains"),
-            URLQueryItem(name: "tag_0", value: category),
+    /// Search by product name or brand (LC-3, Pro). Same `cgi/search.pl`
+    /// endpoint as the alternatives search, with `search_terms` instead
+    /// of a category tag. Only the words the user typed are sent. In
+    /// screenshot mode the bundled sample products are filtered locally
+    /// (offline, deterministic); no network call is made.
+    func searchByName(_ query: String) async throws -> [FoodProduct] {
+        let clean = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !clean.isEmpty else { return [] }
+        if useSampleData {
+            return SampleProducts.search(query: clean)
+        }
+        return try await search(queryItems: [
+            URLQueryItem(name: "search_terms", value: clean),
             URLQueryItem(name: "page_size", value: "20"),
             URLQueryItem(name: "json", value: "1"),
-            URLQueryItem(name: "fields", value: "code,product_name,brands,nutriscore_grade,nova_group,allergens_tags,ingredients_text,nutriments,image_url,categories_tags"),
-        ]
+            URLQueryItem(name: "fields", value: Self.productFields),
+        ])
+    }
+
+    /// One search against `cgi/search.pl`. Returns the raw products
+    /// (unfiltered); the caller applies any grade cut.
+    private func search(queryItems: [URLQueryItem]) async throws -> [FoodProduct] {
+        var components = URLComponents(url: Self.searchURL, resolvingAgainstBaseURL: false)!
+        components.queryItems = [URLQueryItem(name: "action", value: "process")] + queryItems
         guard let url = components.url else { throw OpenFoodFactsError.badResponse }
         var request = URLRequest(url: url)
         request.setValue(Self.userAgent, forHTTPHeaderField: "User-Agent")
@@ -106,6 +122,19 @@ actor OpenFoodFactsClient {
             guard let code = dto.code, !code.isEmpty else { return nil }
             return FoodProduct(dto: dto, barcode: code)
         }
+    }
+
+    /// One category search against `cgi/search.pl`. Returns the raw
+    /// products (unfiltered); the caller applies the grade cut.
+    private func searchCategory(_ category: String) async throws -> [FoodProduct] {
+        try await search(queryItems: [
+            URLQueryItem(name: "tagtype_0", value: "categories"),
+            URLQueryItem(name: "tag_contains_0", value: "contains"),
+            URLQueryItem(name: "tag_0", value: category),
+            URLQueryItem(name: "page_size", value: "20"),
+            URLQueryItem(name: "json", value: "1"),
+            URLQueryItem(name: "fields", value: Self.productFields),
+        ])
     }
 
     /// Returns nil when the barcode is not in Open Food Facts. Throws on

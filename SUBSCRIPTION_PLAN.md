@@ -19,6 +19,7 @@
 | Scan history | Most recent 10 | Unlimited |
 | Allergen profiles | 1 profile | Multiple profiles |
 | OCR label explain | No | Yes |
+| Search by product name | No | Yes |
 | History export | No | Yes (v1.1) |
 
 The free core always works forever. Pro is depth only — it never gates the scan itself.

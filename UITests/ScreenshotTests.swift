@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 8 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 9 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -174,6 +174,56 @@ final class ScreenshotTests: XCTestCase {
         }
         XCTAssertTrue(firstAlternative.waitForExistence(timeout: 10))
         saveScreenshot(named: "08-alternatives")
+    }
+
+    // MARK: - 11 Search (LC-3 screenshot)
+
+    /// Search by name (LC-3, Pro): in screenshot mode the Pro gate is
+    /// bypassed so the lane can capture real results offline. Typing
+    /// "nutella" matches the bundled Nutella sample only. Runs after
+    /// test10, so it cannot disturb the earlier shots; it only navigates
+    /// within the Scan tab.
+    func test11Search() {
+        app.tabBars.buttons["Scan"].tap()
+        // The search section sits below the manual entry card: scroll it
+        // into view first. The Scan screen is a ScrollView, so a swipe
+        // moves it (unlike the Lists in test04/test07).
+        let field = app.textFields["search-field"]
+        for _ in 0..<3 where !field.isHittable {
+            app.swipeUp()
+        }
+        field.tap()
+        field.typeText("nutella")
+        app.buttons["search-button"].tap()
+        let result = app.buttons["search-result-3017620422003"]
+        XCTAssertTrue(result.waitForExistence(timeout: 10))
+        for _ in 0..<5 where !result.isHittable {
+            app.swipeUp()
+        }
+        saveScreenshot(named: "09-search")
+    }
+
+    // MARK: - 12 Search gating (no screenshot)
+
+    /// Search is Pro-only: with a real (non-Pro) store, tapping Search
+    /// must open the paywall instead of running the search. Relaunches
+    /// without `--screenshot-mode`, because screenshot mode bypasses the
+    /// gate so test11 can capture results. Runs last alphabetically, so
+    /// the relaunch cannot disturb the earlier shots.
+    func test12SearchGating() {
+        app.terminate()
+        app.launchArguments = []
+        app.launch()
+        app.tabBars.buttons["Scan"].tap()
+        let field = app.textFields["search-field"]
+        XCTAssertTrue(field.waitForExistence(timeout: 10))
+        for _ in 0..<3 where !field.isHittable {
+            app.swipeUp()
+        }
+        field.tap()
+        field.typeText("nutella")
+        app.buttons["search-button"].tap()
+        XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
     }
 
     // MARK: - Helper

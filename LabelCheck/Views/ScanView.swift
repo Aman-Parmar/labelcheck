@@ -5,6 +5,7 @@ import SwiftUI
 /// Scan tab: the one job of the app. Point the camera at a barcode, or type
 /// the digits under it. Unlimited scans, free, forever.
 struct ScanView: View {
+    @EnvironmentObject private var store: StoreManager
     @Environment(\.modelContext) private var modelContext
 
     @State private var client = OpenFoodFactsClient()
@@ -15,9 +16,20 @@ struct ScanView: View {
     @State private var showingScanner = false
     @State private var photoItem: PhotosPickerItem?
     @State private var ocrText: String?
+    // LC-3 search by name (Pro).
+    @State private var searchText = ""
+    @State private var searchResults: [FoodProduct] = []
+    @State private var isSearching = false
+    @State private var searchStatus: SearchStatus?
+    @State private var showingPaywall = false
 
     enum ScanStatus: Equatable {
         case notFound(String)
+        case error(String)
+    }
+
+    enum SearchStatus: Equatable {
+        case noResults(String)
         case error(String)
     }
 
@@ -27,6 +39,7 @@ struct ScanView: View {
                 VStack(spacing: 16) {
                     cameraCard
                     manualEntry
+                    searchByName
                     ocrButton
                     if isLoading {
                         ProgressView("Looking up barcode…")
@@ -73,6 +86,12 @@ struct ScanView: View {
             // which test02 proves works from this exact view.
             .navigationDestination(item: $ocrText) { text in
                 OCRResultView(text: text)
+            }
+            // Same reason for the paywall: this view already has the
+            // scanner .sheet, so a second .sheet is the pattern that
+            // failed for OCR. A bool push presents the paywall instead.
+            .navigationDestination(isPresented: $showingPaywall) {
+                PaywallView()
             }
             .sheet(isPresented: $showingScanner) {
                 scannerSheet
@@ -148,6 +167,151 @@ struct ScanView: View {
             Text("Only the barcode is sent to Open Food Facts to fetch that product. Nothing else leaves the phone.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+        }
+    }
+
+    // MARK: - Search by name (LC-3, Pro)
+
+    private var searchByName: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Or search by name")
+                .font(.headline)
+            HStack {
+                TextField("Product or brand name", text: $searchText)
+                    .textFieldStyle(.roundedBorder)
+                    .accessibilityIdentifier("search-field")
+                    .onSubmit { runSearch() }
+                Button("Search") {
+                    runSearch()
+                }
+                .buttonStyle(.bordered)
+                .disabled(searchText.trimmingCharacters(in: .whitespaces).isEmpty || isSearching)
+                .accessibilityIdentifier("search-button")
+            }
+            Text("Search is a Pro feature. The words you type are sent to Open Food Facts to find matching products. Nothing else leaves the phone.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            if isSearching {
+                ProgressView("Searching…")
+                    .accessibilityIdentifier("search-progress")
+            }
+            if let searchStatus {
+                searchStatusCard(searchStatus)
+            }
+            if !searchResults.isEmpty {
+                searchResultsList
+            }
+        }
+    }
+
+    private var searchResultsList: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(searchResults) { product in
+                Button {
+                    openSearchResult(product)
+                } label: {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(product.displayName)
+                                .font(.headline)
+                                .foregroundStyle(.primary)
+                            if let brand = product.displayBrand {
+                                Text(brand)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        Spacer()
+                        if let letter = NutriScore(grade: product.nutriScoreGrade ?? "").badgeLetter {
+                            Text(letter)
+                                .font(.headline.bold())
+                                .foregroundStyle(.white)
+                                .frame(width: 32, height: 32)
+                                .background(nutriScoreColor(letter), in: Circle())
+                        }
+                    }
+                    .padding(.vertical, 8)
+                }
+                .buttonStyle(.plain)
+                .accessibilityIdentifier("search-result-\(product.barcode)")
+                if product.id != searchResults.last?.id {
+                    Divider()
+                }
+            }
+        }
+        .padding(.horizontal, 12)
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func searchStatusCard(_ status: SearchStatus) -> some View {
+        Group {
+            switch status {
+            case .noResults(let query):
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("No matches")
+                        .font(.headline)
+                    Text("Nothing in Open Food Facts matched \"\(query)\". Try fewer words, or scan the barcode instead.")
+                }
+            case .error(let message):
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Something went wrong")
+                        .font(.headline)
+                    Text(message)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
+        .accessibilityIdentifier("search-status-card")
+    }
+
+    private func runSearch() {
+        let clean = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !clean.isEmpty, !isSearching else { return }
+        // Pro gate: search is Pro-only, like Yuka. Screenshot mode
+        // bypasses the gate so the lane can capture real results offline;
+        // the gate itself is covered by test12, which relaunches without
+        // screenshot mode.
+        guard store.isPro || ScreenshotMode.isEnabled else {
+            showingPaywall = true
+            return
+        }
+        isSearching = true
+        searchStatus = nil
+        searchResults = []
+        Task { @MainActor in
+            await client.setUseSampleData(ScreenshotMode.isEnabled)
+            do {
+                let results = try await client.searchByName(clean)
+                if results.isEmpty {
+                    searchStatus = .noResults(clean)
+                } else {
+                    searchResults = results
+                }
+            } catch {
+                searchStatus = .error(error.localizedDescription)
+            }
+            isSearching = false
+        }
+    }
+
+    /// Opens a search result the same way a scan opens a product: a full
+    /// lookup by barcode (which also saves the payload to the offline
+    /// cache, LC-2), saved to History, then the product card.
+    private func openSearchResult(_ product: FoodProduct) {
+        Task { @MainActor in
+            await client.setUseSampleData(ScreenshotMode.isEnabled)
+            do {
+                if let full = try await client.fetchProduct(barcode: product.barcode) {
+                    saveToHistory(full)
+                    selectedProduct = full
+                } else {
+                    selectedProduct = product
+                }
+            } catch {
+                selectedProduct = product
+            }
         }
     }
 
