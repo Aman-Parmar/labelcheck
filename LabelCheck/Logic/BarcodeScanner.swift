@@ -1,15 +1,11 @@
 import Foundation
 import SwiftUI
-import Vision
 import VisionKit
 
 /// Barcode scanning, all on-device.
 ///
-/// Primary path: `DataScannerViewController` (VisionKit, iOS 16+), which
-/// recognises EAN-13 / UPC barcodes live from the camera.
-/// Fallback path: `detectBarcodes(in:)` runs a Vision barcode request over a
-/// still image, for devices where the live scanner is unavailable.
-/// No scanned image ever leaves the phone.
+/// `DataScannerViewController` (VisionKit, iOS 16+) recognises EAN-13 / UPC
+/// barcodes live from the camera. No scanned image ever leaves the phone.
 struct BarcodeScannerView: UIViewControllerRepresentable {
     var onBarcode: (String) -> Void
 
@@ -56,30 +52,6 @@ struct BarcodeScannerView: UIViewControllerRepresentable {
                 lastBarcode = value
                 lastFire = Date()
                 onBarcode(value)
-            }
-        }
-    }
-}
-
-/// Vision still-image barcode detection (fallback path).
-enum StillImageBarcodeScanner {
-    static func detectBarcodes(in image: CGImage) async throws -> [String] {
-        try await withCheckedThrowingContinuation { continuation in
-            let request = VNDetectBarcodesRequest { request, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                    return
-                }
-                let codes = (request.results as? [VNBarcodeObservation])?
-                    .compactMap(\.payloadStringValue) ?? []
-                continuation.resume(returning: codes)
-            }
-            request.symbologies = [.ean13, .ean8, .upce]
-            let handler = VNImageRequestHandler(cgImage: image, options: [:])
-            do {
-                try handler.perform([request])
-            } catch {
-                continuation.resume(throwing: error)
             }
         }
     }
