@@ -35,7 +35,7 @@ enum LabelExplainer {
         if let ingredients = product.ingredientsText {
             lines.append("Ingredients: \(ingredients)")
         }
-        lines.append("General information only — not medical or dietary advice. Always check the physical label.")
+        lines.append("General information only, not medical or dietary advice. Always check the physical label.")
         return lines.joined(separator: " ")
     }
 

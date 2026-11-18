@@ -10,7 +10,7 @@ struct SettingsView: View {
             List {
                 Section {
                     if store.isPro {
-                        Label("LabelCheck Pro — thank you", systemImage: "checkmark.seal.fill")
+                        Label("LabelCheck Pro: thank you", systemImage: "checkmark.seal.fill")
                     } else {
                         Button("Get LabelCheck Pro") {
                             showingPaywall = true
@@ -28,7 +28,7 @@ struct SettingsView: View {
                 }
                 Section("Data") {
                     Text("Product data: Open Food Facts (ODbL), crowdsourced. Verify on the physical label.")
-                    Text("General information only — not medical or dietary advice, and not an allergy safety guarantee.")
+                    Text("General information only, not medical or dietary advice, and not an allergy safety guarantee.")
                 }
                 Section("Support") {
                     Text("Support: labelcheck.singhsec.com/labelcheck-support")

@@ -62,6 +62,9 @@ final class ScreenshotTests: XCTestCase {
         app.tabBars.buttons["Scan"].tap()
         app.buttons["ocr-sample-button"].tap()
         XCTAssertTrue(app.staticTexts["ocr-text"].waitForExistence(timeout: 10))
+        // Let the push animation finish: an earlier capture was taken
+        // mid-transition (top half black, tab bar overlapping text).
+        Thread.sleep(forTimeInterval: 1.0)
         saveScreenshot(named: "05-ocr-fallback")
     }
 
@@ -79,6 +82,31 @@ final class ScreenshotTests: XCTestCase {
     func test07Settings() {
         app.tabBars.buttons["Settings"].tap()
         saveScreenshot(named: "07-settings")
+    }
+
+    // MARK: - 08 Add allergen profile (no screenshot)
+
+    /// Covers the add-profile navigation push (AllergenProfilesView used to
+    /// carry two .sheet modifiers on the same view, the same latent bug as
+    /// the OCR sheet). Screenshot mode seeds one profile ("Maya"), so the
+    /// test deletes it first to reach the empty state, then adds a profile
+    /// and checks it appears in the list. Runs last alphabetically, so the
+    /// deletion cannot affect the screenshot tests above.
+    func test08AddProfile() {
+        app.tabBars.buttons["Allergens"].tap()
+        XCTAssertTrue(app.staticTexts["Maya"].waitForExistence(timeout: 10))
+        let mayaCell = app.cells.containing(.staticText, identifier: "Maya").element
+        mayaCell.swipeLeft()
+        app.buttons["Delete"].tap()
+        XCTAssertTrue(app.buttons["add-profile-empty-button"].waitForExistence(timeout: 10))
+        app.buttons["add-profile-empty-button"].tap()
+        let nameField = app.textFields["profile-name-field"]
+        XCTAssertTrue(nameField.waitForExistence(timeout: 10))
+        nameField.tap()
+        nameField.typeText("Sam")
+        app.buttons["allergen-option-Milk"].tap()
+        app.buttons["save-profile-button"].tap()
+        XCTAssertTrue(app.staticTexts["Sam"].waitForExistence(timeout: 10))
     }
 
     // MARK: - Helper

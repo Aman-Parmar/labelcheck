@@ -58,7 +58,14 @@ struct AllergenProfilesView: View {
                     .accessibilityIdentifier("add-profile-button")
                 }
             }
-            .sheet(isPresented: $showingAdd) {
+            // The add-profile form is a navigation push, not a sheet. This
+            // view used to carry two .sheet modifiers (add + paywall) on
+            // the same view, the identical latent bug as ScanView's OCR
+            // sheet: only one sheet reliably presents, so the add form
+            // could silently fail to appear. A push uses the same
+            // mechanism as the product card, which test02 proves works.
+            // The paywall stays as this view's single sheet.
+            .navigationDestination(isPresented: $showingAdd) {
                 AddProfileView()
             }
             .sheet(isPresented: $showingPaywall) {
@@ -74,7 +81,7 @@ struct AllergenProfilesView: View {
                 .foregroundStyle(.secondary)
             Text("No allergen profiles yet")
                 .font(.title3.bold())
-            Text("Add a profile — for example, milk and peanut — and every product card will flag matches. Matching happens on this phone.")
+            Text("Add a profile, for example milk and peanut, and every product card will flag matches. Matching happens on this phone.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -103,58 +110,58 @@ private struct AddProfileView: View {
     @State private var selected: Set<String> = []
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section("Name") {
-                    TextField("Whose profile is this?", text: $name)
-                        .accessibilityIdentifier("profile-name-field")
-                }
-                Section("Allergens to watch for") {
-                    ForEach(AllergenMatcher.allLabels, id: \.self) { label in
-                        Button {
+        // No inner NavigationStack: this view is pushed onto the
+        // AllergenProfilesView stack, which supplies the navigation bar.
+        Form {
+            Section("Name") {
+                TextField("Whose profile is this?", text: $name)
+                    .accessibilityIdentifier("profile-name-field")
+            }
+            Section("Allergens to watch for") {
+                ForEach(AllergenMatcher.allLabels, id: \.self) { label in
+                    Button {
+                        if selected.contains(label) {
+                            selected.remove(label)
+                        } else {
+                            selected.insert(label)
+                        }
+                    } label: {
+                        HStack {
+                            Text(label)
+                                .foregroundStyle(.primary)
+                            Spacer()
                             if selected.contains(label) {
-                                selected.remove(label)
-                            } else {
-                                selected.insert(label)
-                            }
-                        } label: {
-                            HStack {
-                                Text(label)
-                                    .foregroundStyle(.primary)
-                                Spacer()
-                                if selected.contains(label) {
-                                    Image(systemName: "checkmark")
-                                }
+                                Image(systemName: "checkmark")
                             }
                         }
-                        .accessibilityIdentifier("allergen-option-\(label)")
                     }
-                }
-                Section {
-                    Text("Matches are warnings to check the physical label. This is not an allergy safety guarantee.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    .accessibilityIdentifier("allergen-option-\(label)")
                 }
             }
-            .navigationTitle("New profile")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+            Section {
+                Text("Matches are warnings to check the physical label. This is not an allergy safety guarantee.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle("New profile")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Cancel") { dismiss() }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Save") {
+                    let keys = selected.compactMap(AllergenMatcher.key(forLabel:))
+                    modelContext.insert(AllergenProfile(
+                        name: name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "My profile" : name,
+                        allergens: keys
+                    ))
+                    try? modelContext.save()
+                    dismiss()
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        let keys = selected.compactMap(AllergenMatcher.key(forLabel:))
-                        modelContext.insert(AllergenProfile(
-                            name: name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "My profile" : name,
-                            allergens: keys
-                        ))
-                        try? modelContext.save()
-                        dismiss()
-                    }
-                    .disabled(selected.isEmpty)
-                    .accessibilityIdentifier("save-profile-button")
-                }
+                .disabled(selected.isEmpty)
+                .accessibilityIdentifier("save-profile-button")
             }
         }
     }

@@ -24,7 +24,7 @@ struct OCRResultView: View {
                             .font(.headline)
                             .accessibilityIdentifier("ocr-allergens")
                         if foundAllergens.isEmpty {
-                            Text("No listed allergens recognised in this text. OCR can miss things — always check the physical label.")
+                            Text("No listed allergens recognised in this text. OCR can miss things. Always check the physical label.")
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         } else {

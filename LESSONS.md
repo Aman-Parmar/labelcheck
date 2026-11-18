@@ -47,3 +47,9 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 - Open Food Facts is crowdsourced: show "not found / verify" states, never auto-trust.
 - Sample data is labelled as sample data, in the file and in this document. Screenshot values are a snapshot, not live data.
 - Foundation Models is a gated iOS 26+ enhancement, never the core value prop. iOS 26 context is 4096 tokens, not 8192 — keep prompts short.
+
+## 7. SwiftUI presentation traps (found the hard way)
+
+- Never put two `.sheet` modifiers on the same view: only one reliably presents, and the other can silently fail to appear with no error. ScanView's OCR sheet never presented in CI (runs 44238639541, 44240348390) until it became a navigation push; AllergenProfilesView had the identical latent bug (add + paywall sheets) and was fixed the same way (2026-11-18). One sheet per view at most; anything else is a navigation push, and a UI test must cover the push.
+- Screenshot timing: `waitForExistence` returns as soon as the element exists, which can be mid-push-transition. Add a 1s settle delay before capturing a screenshot of a pushed view (05-OCR was captured mid-transition: top half black, tab bar overlapping text).
+- No em dashes in user-facing copy, ever. Use a colon or a full stop instead. Swept 2026-11-18 (20 strings across NutriScore, LabelExplainer, Paywall, Scan, Product, OCR result, Settings, Allergen profiles).

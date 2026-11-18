@@ -85,11 +85,11 @@ struct PaywallView: View {
                             .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
                             .accessibilityIdentifier("buy-\(row.id)")
                         }
-                        Text("Screenshot sample — purchases disabled in screenshot mode.")
+                        Text("Screenshot sample: purchases disabled in screenshot mode.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     } else {
-                        Text("Products could not be loaded. Check your connection and try again — purchases are handled by Apple.")
+                        Text("Products could not be loaded. Check your connection and try again. Purchases are handled by Apple.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -102,7 +102,7 @@ struct PaywallView: View {
                         Task { await store.restore() }
                     }
                     .buttonStyle(.bordered)
-                    Text("Payment is handled by Apple. Subscriptions renew automatically unless cancelled in iPhone Settings. General information only — not medical or dietary advice.")
+                    Text("Payment is handled by Apple. Subscriptions renew automatically unless cancelled in iPhone Settings. General information only, not medical or dietary advice.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

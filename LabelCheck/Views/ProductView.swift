@@ -66,7 +66,7 @@ struct ProductView: View {
         Group {
             if matchedAllergens.isEmpty {
                 Label {
-                    Text("No match with your active allergen profiles. Still check the physical label — this data is crowdsourced and may be incomplete.")
+                    Text("No match with your active allergen profiles. Still check the physical label. This data is crowdsourced and may be incomplete.")
                         .font(.subheadline)
                 } icon: {
                     Image(systemName: "checkmark.shield")
@@ -77,7 +77,7 @@ struct ProductView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Label("Contains: \(matchedAllergens.joined(separator: ", "))", systemImage: "exclamationmark.triangle.fill")
                         .font(.headline)
-                    Text("This matches an allergen in your active profile. Check the physical label before eating — this is not an allergy safety guarantee.")
+                    Text("This matches an allergen in your active profile. Check the physical label before eating. This is not an allergy safety guarantee.")
                         .font(.subheadline)
                 }
                 .padding()
@@ -203,8 +203,8 @@ struct ProductView: View {
 
     private var sourceFooter: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Data: Open Food Facts (ODbL), crowdsourced — verify on the physical label. Product data may be incomplete or out of date.")
-            Text("General information only — not medical or dietary advice, and not an allergy safety guarantee. Check with a doctor about dietary questions.")
+            Text("Data: Open Food Facts (ODbL), crowdsourced. Verify on the physical label. Product data may be incomplete or out of date.")
+            Text("General information only, not medical or dietary advice, and not an allergy safety guarantee. Check with a doctor about dietary questions.")
         }
         .font(.caption)
         .foregroundStyle(.secondary)

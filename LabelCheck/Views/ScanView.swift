@@ -176,7 +176,7 @@ struct ScanView: View {
                     Text("Not found")
                         .font(.headline)
                     Text("Barcode \(barcode) is not in Open Food Facts yet. The database is crowdsourced and still growing.")
-                    Text("Try reading the label photo instead — the ingredients panel is on the packet.")
+                    Text("Try reading the label photo instead. The ingredients panel is on the packet.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -195,7 +195,7 @@ struct ScanView: View {
     }
 
     private var disclaimer: some View {
-        Text("General information only — not medical or dietary advice, and not an allergy safety guarantee. Always check the physical label, and check with a doctor about dietary questions.")
+        Text("General information only, not medical or dietary advice, and not an allergy safety guarantee. Always check the physical label, and check with a doctor about dietary questions.")
             .font(.caption)
             .foregroundStyle(.secondary)
             .multilineTextAlignment(.center)

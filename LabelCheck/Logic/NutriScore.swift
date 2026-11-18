@@ -22,11 +22,11 @@ struct NutriScore {
     /// Plain-language line for the product card. No health verdict.
     var explanation: String {
         switch Self.normalised(grade) {
-        case "a": return "Nutri-Score A — the highest score in this system."
+        case "a": return "Nutri-Score A: the highest score in this system."
         case "b": return "Nutri-Score B in this system."
         case "c": return "Nutri-Score C in this system."
         case "d": return "Nutri-Score D in this system."
-        case "e": return "Nutri-Score E — the lowest score in this system."
+        case "e": return "Nutri-Score E: the lowest score in this system."
         default: return "No Nutri-Score listed for this product."
         }
     }
@@ -35,10 +35,10 @@ struct NutriScore {
     /// Shown as general information only.
     static func novaExplanation(_ group: Int?) -> String {
         switch group {
-        case 1: return "NOVA group 1 — unprocessed or minimally processed."
-        case 2: return "NOVA group 2 — processed culinary ingredient."
-        case 3: return "NOVA group 3 — processed food."
-        case 4: return "NOVA group 4 — ultra-processed food."
+        case 1: return "NOVA group 1: unprocessed or minimally processed."
+        case 2: return "NOVA group 2: processed culinary ingredient."
+        case 3: return "NOVA group 3: processed food."
+        case 4: return "NOVA group 4: ultra-processed food."
         default: return "No NOVA group listed for this product."
         }
     }
