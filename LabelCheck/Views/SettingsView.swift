@@ -57,7 +57,7 @@ struct SettingsView: View {
                 // visible at rest in the listing screenshot.
                 Section("Privacy") {
                     Text("No account. No analytics. No ads. No tracking. Deleting the app deletes your history and profiles.")
-                    Text("Only the scanned barcode leaves this phone. History and profiles stay on this phone.")
+                    Text("Only the scanned barcode and the product category leave this phone. History and profiles stay on this phone.")
                     Text("Product data: Open Food Facts (ODbL).")
                     Text("General information only, not medical or dietary advice, and not an allergy safety guarantee.")
                 }

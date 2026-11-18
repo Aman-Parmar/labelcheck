@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 7 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 8 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -41,6 +41,10 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["manual-lookup-button"].tap()
         let productName = app.staticTexts["product-name"]
         XCTAssertTrue(productName.waitForExistence(timeout: 10))
+        // LC-1: Nutella is grade E, so the alternatives section loads from
+        // bundled sample data (offline). It sits below the fold, so it does
+        // not change this shot; test10 captures it.
+        XCTAssertTrue(app.otherElements["alternatives-section"].waitForExistence(timeout: 10))
         saveScreenshot(named: "02-product-card")
     }
 
@@ -140,6 +144,32 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
         app.buttons["history-export-button"].tap()
         XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
+    }
+
+    // MARK: - 10 Alternatives (LC-1 screenshot)
+
+    /// The alternatives section sits below the fold on the product card,
+    /// so it gets its own shot: Nutella (grade E) with three bundled
+    /// sample alternatives (Funkie praliné C, Bonne Maman D, Funkie D).
+    /// Runs last alphabetically, after test09, so it cannot disturb the
+    /// earlier shots; it only navigates.
+    func test10Alternatives() {
+        app.tabBars.buttons["Scan"].tap()
+        let field = app.textFields["manual-barcode-field"]
+        field.tap()
+        field.typeText("3017620422003")
+        app.buttons["manual-lookup-button"].tap()
+        XCTAssertTrue(app.staticTexts["product-name"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.otherElements["alternatives-section"].waitForExistence(timeout: 10))
+        // Scroll the section into view: the card is a ScrollView, so a
+        // swipe moves it (unlike the Lists in test04/test07). Stop as
+        // soon as the first alternative row is tappable.
+        let firstAlternative = app.buttons["alternative-product-3760336830357"]
+        for _ in 0..<5 where !firstAlternative.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(firstAlternative.waitForExistence(timeout: 10))
+        saveScreenshot(named: "08-alternatives")
     }
 
     // MARK: - Helper

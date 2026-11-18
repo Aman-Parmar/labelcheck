@@ -28,6 +28,10 @@ enum SampleProducts {
     private struct File: Decodable {
         let products: [Entry]
         let ocrSampleText: String
+        /// Sample alternatives per product barcode (LC-1), for the
+        /// screenshot lane only. Only Nutella has bundled alternatives;
+        /// other sample products return an empty list.
+        let alternatives: [String: [Entry]]?
     }
 
     private struct Entry: Decodable {
@@ -58,6 +62,15 @@ enum SampleProducts {
     /// Sample OCR text for the 05-OCR screenshot.
     static var ocrSampleText: String {
         loaded?.ocrSampleText ?? ""
+    }
+
+    /// Bundled alternatives for a barcode (LC-1), or an empty list when
+    /// none are bundled. Screenshot mode only; the live app fetches them
+    /// from Open Food Facts instead.
+    static func alternatives(forBarcode barcode: String) -> [FoodProduct] {
+        loaded?.alternatives?[barcode]?.map {
+            FoodProduct(dto: $0.product, barcode: $0.barcode)
+        } ?? []
     }
 }
 

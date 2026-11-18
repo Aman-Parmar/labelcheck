@@ -15,13 +15,13 @@ A feature only moves from "not building" to the roadmap on a new decision with e
 - Paywall: StoreKit 2, $9.99/year + $19.99 lifetime, one Pro entitlement
 - Settings: privacy, attribution, support/privacy links, restore purchases
 - Real 1024x1024 app icon; labelcheck.singhsec.com support + privacy pages live
-- CI: Linux lint → macOS test + screenshots in parallel → archive (skipped until signing secrets exist); 7-shot screenshot lane with bundled sample data, deterministic and offline
+- CI: Linux lint → macOS test + screenshots in parallel → archive (skipped until signing secrets exist); 8-shot screenshot lane with bundled sample data, deterministic and offline (08-alternatives added with LC-1)
 
 ## Sprint 1 — 2026-11-18 to 2026-11-24 (in progress)
 
 Sprint goal: close the gaps users complain about most in every competing scanner, starting with the one every winner ships.
 
-- **LC-1 Healthier alternatives (same-category, better Nutri-Score)** — medium. Evidence: most-requested feature across winners; Yuka 5-star reviews praise swaps, its absence is a named complaint; Bobby, Trash Panda, Fig all ship it. Acceptance: on a D/E product card, 2-3 same-category products with a better Nutri-Score from OFF category search, one tap to view.
+- **LC-1 Healthier alternatives (same-category, better Nutri-Score)** — medium. Evidence: most-requested feature across winners; Yuka 5-star reviews praise swaps, its absence is a named complaint; Bobby, Trash Panda, Fig all ship it. Acceptance: on a D/E product card, 2-3 same-category products with a better Nutri-Score from OFF category search, one tap to view. Status 2026-11-18: BUILT (commit pending this run), awaiting QA verification. Notes: search endpoint is `cgi/search.pl` (OFF ignores a Nutri-Score filter there, so the grade cut is client-side); category candidates most-specific-first with a broad-category denylist, up to 3 searches; section hidden on fetch failure; privacy policy + Settings copy updated (category tag is now also sent); screenshot lane is 8 shots (08-alternatives added).
 - **LC-2 Offline cache of scanned products** — small. Evidence: offline mode is a Yuka Premium selling point; store-signal timeouts freezing apps is a recurring 1-star theme. Acceptance: every scanned product's OFF payload cached in SwiftData at scan time; re-scans and history work with no signal.
 - **LC-3 Search by product name (no barcode)** — small-medium, Pro-gated. Evidence: Yuka locks search behind Premium and users complain about exactly that ("can't search the brand, you have to be a member"); OFF API supports it natively. Acceptance: type-to-search by name/brand, Pro gate like Yuka's.
 

@@ -19,6 +19,10 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
     let ingredientsText: String?
     let nutriments: Nutriments
     let imageURL: URL?
+    /// Open Food Facts category tags, e.g. ["en:breakfasts",
+    /// "en:chocolate-spreads"]. Used to find same-category products with
+    /// a higher Nutri-Score (LC-1). Empty when the entry lists none.
+    let categoriesTags: [String]
 
     var displayName: String {
         name?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -47,6 +51,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         self.ingredientsText = dto.ingredientsText?.nilIfEmpty
         self.nutriments = Nutriments(dto: dto.nutriments)
         self.imageURL = dto.imageURL.flatMap(URL.init(string:))
+        self.categoriesTags = dto.categoriesTags ?? []
     }
 
     init(
@@ -58,7 +63,8 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         allergenTags: [String] = [],
         ingredientsText: String? = nil,
         nutriments: Nutriments = Nutriments(),
-        imageURL: URL? = nil
+        imageURL: URL? = nil,
+        categoriesTags: [String] = []
     ) {
         self.barcode = barcode
         self.name = name
@@ -69,6 +75,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         self.ingredientsText = ingredientsText
         self.nutriments = nutriments
         self.imageURL = imageURL
+        self.categoriesTags = categoriesTags
     }
 }
 
@@ -150,6 +157,10 @@ struct OpenFoodFactsProductDTO: Decodable {
     let ingredientsText: String?
     let nutriments: OpenFoodFactsNutrimentsDTO?
     let imageURL: String?
+    let categoriesTags: [String]?
+    /// Present in category-search results; the product lookup endpoint
+    /// puts the barcode in the URL instead. Nil on the lookup path.
+    let code: String?
 
     enum CodingKeys: String, CodingKey {
         case productName = "product_name"
@@ -160,7 +171,15 @@ struct OpenFoodFactsProductDTO: Decodable {
         case ingredientsText = "ingredients_text"
         case nutriments
         case imageURL = "image_url"
+        case categoriesTags = "categories_tags"
+        case code
     }
+}
+
+/// Category-search response from `cgi/search.pl` (LC-1). Same product
+/// fields as the v3 lookup, plus `code` as the barcode, under `products`.
+struct OpenFoodFactsSearchResponse: Decodable {
+    let products: [OpenFoodFactsProductDTO]?
 }
 
 struct OpenFoodFactsNutrimentsDTO: Decodable {

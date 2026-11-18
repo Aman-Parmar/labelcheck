@@ -14,6 +14,14 @@ struct ProductView: View {
     @State private var modelExplanation: String?
     @State private var explaining = false
 
+    // LC-1 alternatives: same-category products with a higher Nutri-Score.
+    // Loaded once when the card appears; nil while loading, empty when
+    // nothing better was found, hidden entirely when the fetch fails.
+    @State private var alternativesClient = OpenFoodFactsClient()
+    @State private var alternatives: [FoodProduct]?
+    @State private var alternativesFailed = false
+    @State private var selectedAlternative: FoodProduct?
+
     private var matchedAllergens: [String] {
         // Profiles store allergen KEYS (e.g. "tree-nut"); match on keys.
         let keys = activeProfiles.flatMap { $0.allergenList }
@@ -33,9 +41,13 @@ struct ProductView: View {
                 nutrimentsSection
                 ingredientsSection
                 explainSection
+                alternativesSection
                 sourceFooter
             }
             .padding()
+        }
+        .task {
+            await loadAlternatives()
         }
         // Detail screens use the full screen: hide the floating tab bar on
         // push, so the card is never half-hidden behind the pill (the 02
@@ -43,6 +55,10 @@ struct ProductView: View {
         .toolbar(.hidden, for: .tabBar)
         .navigationTitle(product.displayName)
         .navigationBarTitleDisplayMode(.inline)
+        // Tapping an alternative pushes its own card on the same stack.
+        .navigationDestination(item: $selectedAlternative) { alternative in
+            ProductView(product: alternative)
+        }
     }
 
     // MARK: - Header
@@ -189,6 +205,80 @@ struct ProductView: View {
                     .accessibilityIdentifier("explain-ai-button")
                 }
             }
+        }
+    }
+
+    // MARK: - Alternatives (LC-1)
+
+    /// Same-category products with a higher Nutri-Score, on D/E cards
+    /// only. One tap opens that product's card. Never a health verdict:
+    /// the rows show the Nutri-Score letter, which is general information
+    /// from Open Food Facts. Hidden when the fetch fails, so a D/E card
+    /// never shows a broken section.
+    private var alternativesSection: some View {
+        Group {
+            if AlternativeProducts.showsAlternatives(for: product), !alternativesFailed {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Higher Nutri-Score in this category")
+                        .font(.headline)
+                    Text("Same kind of product, from Open Food Facts. A higher Nutri-Score is general information, not dietary advice. Only the product category is sent to fetch these.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    if let alternatives {
+                        if alternatives.isEmpty {
+                            Text("No higher-scored products found in this category yet.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            ForEach(alternatives) { alternative in
+                                Button {
+                                    selectedAlternative = alternative
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        if let letter = NutriScore(grade: alternative.nutriScoreGrade ?? "").badgeLetter {
+                                            Text(letter)
+                                                .font(.headline.bold())
+                                                .foregroundStyle(.white)
+                                                .frame(width: 36, height: 36)
+                                                .background(nutriScoreColor(letter), in: Circle())
+                                        }
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(alternative.displayName)
+                                                .font(.subheadline.bold())
+                                            if let brand = alternative.displayBrand {
+                                                Text(brand)
+                                                    .font(.caption)
+                                                    .foregroundStyle(.secondary)
+                                            }
+                                        }
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityIdentifier("alternative-product-\(alternative.barcode)")
+                            }
+                        }
+                    } else {
+                        ProgressView()
+                    }
+                }
+                .accessibilityIdentifier("alternatives-section")
+            }
+        }
+    }
+
+    private func loadAlternatives() async {
+        guard AlternativeProducts.showsAlternatives(for: product),
+              alternatives == nil, !alternativesFailed
+        else { return }
+        await alternativesClient.setUseSampleData(ScreenshotMode.isEnabled)
+        do {
+            alternatives = try await alternativesClient.fetchAlternatives(for: product)
+        } catch {
+            alternativesFailed = true
         }
     }
 

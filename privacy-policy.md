@@ -1,16 +1,17 @@
 # LabelCheck — Privacy Policy
 
-Last updated: November 17, 2026.
+Last updated: November 18, 2026.
 
 LabelCheck is published by Aman Parmar (ThreatRepel). Contact: aman@threatrepel.com.
 
 ## Summary
 
-LabelCheck collects nothing about you. There is no account, no analytics, no advertising, and no tracking. Your scan history and allergen profiles stay on your phone. The only data that leaves your phone is the barcode you scan, sent to Open Food Facts to fetch that product's information.
+LabelCheck collects nothing about you. There is no account, no analytics, no advertising, and no tracking. Your scan history and allergen profiles stay on your phone. The only data that leaves your phone is the barcode you scan, sent to Open Food Facts to fetch that product's information, and, on a product with Nutri-Score D or E, that product's category, sent to Open Food Facts to fetch same-category products with a higher Nutri-Score.
 
 ## What the app does with your data
 
 - **Barcodes you scan.** When you scan or type a barcode, the app sends that barcode, and only that barcode, to Open Food Facts (world.openfoodfacts.org) to look up the product. Open Food Facts is an independent open database; its own privacy policy applies to that lookup. No name, email, location, or device identifier is sent with it.
+- **Product categories for alternatives.** On a product card with Nutri-Score D or E, the app sends that product's category (for example, "chocolate spreads") to Open Food Facts to fetch same-category products with a higher Nutri-Score. Only the category is sent. No name, email, location, or device identifier is sent with it.
 - **Camera and photos.** The camera is used to scan barcodes, and a photo you choose is used to read a label. Images are processed on your phone (Apple Vision and Natural Language frameworks) and are never uploaded anywhere.
 - **Scan history and allergen profiles.** Stored on your phone only, in the app's local database. They are never synced, shared, or uploaded. Deleting the app deletes them.
 - **Purchases.** Pro purchases are handled by Apple through StoreKit. The app never sees your card number or payment details. Apple may share a transaction record with us through App Store Connect for accounting; we do not use it for advertising or profiling.

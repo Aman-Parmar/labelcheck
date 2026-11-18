@@ -13,7 +13,7 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 
 ## 2. Screenshots — real, never mockups
 
-- 7-shot lane on the iPhone 17 Pro Max simulator: 01-scan, 02-product card, 03-allergens, 04-history, 05-OCR fallback, 06-paywall, 07-settings (`UITests/ScreenshotTests.swift`).
+- 8-shot lane on the iPhone 17 Pro Max simulator: 01-scan, 02-product card, 03-allergens, 04-history, 05-OCR fallback, 06-paywall, 07-settings, 08-alternatives (`UITests/ScreenshotTests.swift`). 08 added 2026-11-18 with LC-1 (alternatives section sits below the fold on the card, so it gets its own shot).
 - Screenshot-mode sample data only: a fixed set of 3 known Open Food Facts barcodes/products with bundled sample JSON (`LabelCheck/SampleData/SampleProducts.json`), so screenshots are deterministic and offline. Never mockups, never Figma.
 - Every future update comes with real simulator screenshots from CI.
 - Verify framing after every run: scan button, Nutri-Score badge, and allergen banner fully visible in each shot, no clipping.
