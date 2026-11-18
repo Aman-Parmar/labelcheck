@@ -67,7 +67,7 @@ struct ScanView: View {
         VStack(spacing: 12) {
             Image(systemName: "barcode.viewfinder")
                 .font(.system(size: 56))
-                .foregroundStyle(.accent)
+                .foregroundStyle(Color.accentColor)
                 .accessibilityIdentifier("scan-icon")
             Text("Scan any packaged food")
                 .font(.title3.bold())

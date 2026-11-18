@@ -4,7 +4,7 @@ import Foundation
 /// Endpoint: GET https://world.openfoodfacts.org/api/v3/product/{barcode}.json
 /// No API key. Open Food Facts data is crowdsourced (ODbL licensed): the app
 /// never auto-trusts it and always shows a "verify on the physical label" state.
-struct FoodProduct: Identifiable, Equatable {
+struct FoodProduct: Identifiable, Equatable, Hashable {
     var id: String { barcode }
     let barcode: String
     let name: String?
@@ -74,7 +74,7 @@ struct FoodProduct: Identifiable, Equatable {
 
 /// Nutriments per 100 g, as reported by Open Food Facts. Every field is
 /// optional: crowdsourced products often have partial nutrition data.
-struct Nutriments: Equatable {
+struct Nutriments: Equatable, Hashable {
     var energyKcal: Double?
     var fat: Double?
     var saturatedFat: Double?
