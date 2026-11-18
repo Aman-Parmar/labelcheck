@@ -27,7 +27,9 @@ Data comes from Open Food Facts, a crowdsourced open database — always check t
 
 ## Keywords
 
-barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, food scanner, grocery, Open Food Facts
+barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, food scanner, grocery
+
+<!-- 98 characters: App Store Connect caps keywords at 100. Do not add terms without recounting. -->
 
 ## Category
 
