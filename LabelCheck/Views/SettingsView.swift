@@ -21,6 +21,18 @@ struct SettingsView: View {
                             .foregroundStyle(.secondary)
                     }
                 }
+                // Support sits second, not last: at rest the support URL
+                // clears the iOS 26 floating tab bar, so the listing
+                // screenshot (test07) shows it fully instead of cut off
+                // behind the pill. It is also the row a user most often
+                // needs, so earlier is better discoverability, not just
+                // framing.
+                Section("Support") {
+                    Text("Support: labelcheck.singhsec.com/labelcheck-support")
+                    Text("Privacy policy: labelcheck.singhsec.com/labelcheck-privacy")
+                    Text("Version 1.0 (1)")
+                        .foregroundStyle(.secondary)
+                }
                 Section("Privacy") {
                     Text("No account. No analytics. No ads. No tracking.")
                     Text("Only the scanned barcode is sent to Open Food Facts to fetch that product's data. Scan history and allergen profiles stay on this phone.")
@@ -29,12 +41,6 @@ struct SettingsView: View {
                 Section("Data") {
                     Text("Product data: Open Food Facts (ODbL), crowdsourced. Verify on the physical label.")
                     Text("General information only, not medical or dietary advice, and not an allergy safety guarantee.")
-                }
-                Section("Support") {
-                    Text("Support: labelcheck.singhsec.com/labelcheck-support")
-                    Text("Privacy policy: labelcheck.singhsec.com/labelcheck-privacy")
-                    Text("Version 1.0 (1)")
-                        .foregroundStyle(.secondary)
                 }
                 Section {
                     Button("Restore purchases") {

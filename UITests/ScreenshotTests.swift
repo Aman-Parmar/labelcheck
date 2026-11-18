@@ -91,7 +91,8 @@ final class ScreenshotTests: XCTestCase {
     func test07Settings() {
         app.tabBars.buttons["Settings"].tap()
         // No scroll: see test04History — the List does not move under test
-        // gestures, and the Pro section + Privacy header are fully visible.
+        // gestures. The Support section sits second now, so the support
+        // URL clears the floating tab bar at rest and is fully visible.
         saveScreenshot(named: "07-settings")
     }
 
