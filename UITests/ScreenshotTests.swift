@@ -138,9 +138,12 @@ final class ScreenshotTests: XCTestCase {
     /// List whose rows are Buttons (the row captures the touch), so the
     /// History and Settings shots use a real swipe instead. Ends at the
     /// max offset, which the 110pt bottom content margin makes enough to
-    /// lift the last rows clear of the floating tab bar pill.
+    /// lift the last rows clear of the floating tab bar pill. Swipe on the
+    /// app element itself, not `tables.firstMatch`: a SwiftUI List exposes
+    /// no Table element in this hierarchy (test04/test07 failed with "No
+    /// matches found" in run 44252395003).
     private func scrollListToBottom() {
-        app.tables.firstMatch.swipeUp()
+        app.swipeUp()
         Thread.sleep(forTimeInterval: 1.5)
     }
 
