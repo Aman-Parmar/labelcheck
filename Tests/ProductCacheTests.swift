@@ -53,7 +53,11 @@ final class ProductCacheTests: XCTestCase {
         let container = try inMemoryContainer()
         let store = ProductPayloadStore(container: container)
         await store.save(barcode: "3017620422003", payload: Data(nutellaJSON.utf8))
-        let product = try XCTUnwrap(await store.load(barcode: "3017620422003"))
+        // Hoist the await out of XCTUnwrap: its autoclosure is a
+        // synchronous nonisolated context, so `await` inside it does not
+        // compile (CI run 44388254858).
+        let loaded = await store.load(barcode: "3017620422003")
+        let product = try XCTUnwrap(loaded)
         XCTAssertEqual(product.displayName, "Nutella")
         XCTAssertEqual(product.displayBrand, "Ferrero")
         XCTAssertEqual(product.nutriScoreGrade, "e")
@@ -66,14 +70,16 @@ final class ProductCacheTests: XCTestCase {
 
     func testLoadUnknownBarcodeReturnsNil() async throws {
         let store = ProductPayloadStore(container: try inMemoryContainer())
-        XCTAssertNil(await store.load(barcode: "0000000000000"))
+        let loaded = await store.load(barcode: "0000000000000")
+        XCTAssertNil(loaded)
     }
 
     func testLoadCorruptPayloadReturnsNil() async throws {
         let container = try inMemoryContainer()
         let store = ProductPayloadStore(container: container)
         await store.save(barcode: "3017620422003", payload: Data("not json".utf8))
-        XCTAssertNil(await store.load(barcode: "3017620422003"))
+        let loaded = await store.load(barcode: "3017620422003")
+        XCTAssertNil(loaded)
     }
 
     func testSaveOverwritesSameBarcode() async throws {
@@ -83,7 +89,8 @@ final class ProductCacheTests: XCTestCase {
         let renamed = nutellaJSON.replacingOccurrences(of: "Nutella", with: "Nutella Light")
         await store.save(barcode: "3017620422003", payload: Data(renamed.utf8))
         XCTAssertEqual(try cachedCount(in: container), 1)
-        let product = try XCTUnwrap(await store.load(barcode: "3017620422003"))
+        let loaded = await store.load(barcode: "3017620422003")
+        let product = try XCTUnwrap(loaded)
         XCTAssertEqual(product.displayName, "Nutella Light")
     }
 
