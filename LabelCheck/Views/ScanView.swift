@@ -53,6 +53,14 @@ struct ScanView: View {
             // The card's own "Scan any packaged food" heading carries the
             // screen's identity, so nothing is lost.
             .navigationBarTitleDisplayMode(.inline)
+            .task {
+                // LC-2: wire the persistent offline cache once when the
+                // tab appears. Lookups after this read the SwiftData cache
+                // before hitting the network; the store is built from the
+                // app's container, so it sees the same database as History.
+                await client.setPayloadStore(
+                    ProductPayloadStore(container: modelContext.container))
+            }
             .navigationDestination(item: $selectedProduct) { product in
                 ProductView(product: product)
             }

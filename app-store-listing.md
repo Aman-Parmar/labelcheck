@@ -18,6 +18,8 @@ No account. No ads. No tracking. Your scan history and allergen profiles stay on
 
 Set up allergen profiles for yourself or your family, and every product card flags matches on your phone, before you buy.
 
+Once you have scanned a product, you can open it again with no signal: the full product details are cached on your phone.
+
 No barcode, or product not found? Photograph the ingredients panel and LabelCheck reads it on your phone.
 
 Free: unlimited barcode scans and the full product card, forever.

@@ -14,7 +14,7 @@ struct LabelCheckApp: App {
             ContentView()
                 .environmentObject(store)
         }
-        .modelContainer(for: [ScannedProduct.self, AllergenProfile.self])
+        .modelContainer(for: [ScannedProduct.self, AllergenProfile.self, CachedProduct.self])
     }
 }
 

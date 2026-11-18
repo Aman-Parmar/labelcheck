@@ -191,7 +191,7 @@ Apple's commission is separate and comes out of sales, not out of pocket: 15 per
 ## Privacy
 
 - No account, no analytics SDK, no ads, no server. Scan history and allergen profiles stay on the device in SwiftData.
-- The only network calls are to Open Food Facts: the scanned barcode to fetch that product's data, and, on a D/E product card, the product's category to fetch same-category products with a higher Nutri-Score. Barcode lookups are cached in memory.
+- The only network calls are to Open Food Facts: the scanned barcode to fetch that product's data, and, on a D/E product card, the product's category to fetch same-category products with a higher Nutri-Score. Barcode lookups are cached in memory, and each scanned product's full details are cached on the device in SwiftData, so re-scans and History work with no signal.
 - Camera images and label photos are processed on-device (Vision, Natural Language, Foundation Models) and never leave the phone.
 - StoreKit transactions are handled by Apple. The app never sees a card number.
 - Do not add analytics, crash reporting, or ads in v1. Each one is a privacy disclosure and a review risk, and none of them is needed to learn whether the scanner works.

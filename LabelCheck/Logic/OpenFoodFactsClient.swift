@@ -8,7 +8,11 @@ import Foundation
 /// Only the scanned barcode (lookup) or the product's category tag
 /// (alternatives search) is ever sent. No name, email, location, or
 /// device identifier is sent with either call.
-/// Results are cached in memory so a re-scan never re-hits the network.
+/// Results are cached in memory so a re-scan never re-hits the network,
+/// and persisted in SwiftData (LC-2) so a re-scan or a History tap works
+/// with no signal at all. The persistent store is set by the view layer
+/// from the app's ModelContainer; the client works without it (memory
+/// cache + network only).
 ///
 /// Data is crowdsourced (ODbL). The app never auto-trusts it: every product
 /// card shows a "verify on the physical label" state.
@@ -24,6 +28,14 @@ actor OpenFoodFactsClient {
 
     func setUseSampleData(_ enabled: Bool) {
         useSampleData = enabled
+    }
+
+    /// Persistent payload store (LC-2), set by the view layer from the
+    /// app's ModelContainer. Nil until set; the client works without it.
+    private var payloadStore: ProductPayloadStore?
+
+    func setPayloadStore(_ store: ProductPayloadStore?) {
+        payloadStore = store
     }
 
     private var cache: [String: FoodProduct] = [:]
@@ -109,6 +121,15 @@ actor OpenFoodFactsClient {
             return product
         }
 
+        // LC-2: persistent offline cache. Sample data wins over the cache
+        // in screenshot mode (checked above) so the lane stays
+        // deterministic; in the live app a cached payload means the
+        // re-scan never touches the network.
+        if let cached = await payloadStore?.load(barcode: clean) {
+            cache[clean] = cached
+            return cached
+        }
+
         let url = Self.baseURL.appendingPathComponent("\(clean).json")
         var request = URLRequest(url: url)
         request.setValue(Self.userAgent, forHTTPHeaderField: "User-Agent")
@@ -126,6 +147,9 @@ actor OpenFoodFactsClient {
         guard let dto = decoded.product else { return nil }
         let product = FoodProduct(dto: dto, barcode: clean)
         cache[clean] = product
+        // LC-2: persist the raw payload at scan time so the next re-scan
+        // and History taps work with no signal.
+        await payloadStore?.save(barcode: clean, payload: data)
         return product
     }
 }

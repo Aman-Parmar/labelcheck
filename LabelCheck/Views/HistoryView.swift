@@ -34,16 +34,14 @@ struct HistoryView: View {
                     List {
                         ForEach(visibleItems) { item in
                             Button {
-                                selectedProduct = FoodProduct(
-                                    barcode: item.barcode,
-                                    name: item.name,
-                                    brand: item.brand,
-                                    nutriScoreGrade: item.nutriScoreGrade,
-                                    novaGroup: item.novaGroup,
-                                    allergenTags: item.allergenList
-                                        .compactMap(AllergenMatcher.key(forLabel:))
-                                        .map { "en:\($0)" }
-                                )
+                                // LC-2: open the full cached product when
+                                // one exists, so a History tap works with
+                                // no signal. Falls back to the summary
+                                // fields stored on the row (no ingredients
+                                // or nutrition data) when nothing is cached.
+                                Task {
+                                    selectedProduct = await fullProduct(for: item)
+                                }
                             } label: {
                                 HStack {
                                     VStack(alignment: .leading, spacing: 2) {
@@ -153,5 +151,24 @@ struct HistoryView: View {
             modelContext.delete(visibleItems[index])
         }
         try? modelContext.save()
+    }
+
+    /// The full product for a history row: the cached payload when one
+    /// exists (LC-2), otherwise the summary fields stored on the row.
+    private func fullProduct(for item: ScannedProduct) async -> FoodProduct {
+        let store = ProductPayloadStore(container: modelContext.container)
+        if let cached = await store.load(barcode: item.barcode) {
+            return cached
+        }
+        return FoodProduct(
+            barcode: item.barcode,
+            name: item.name,
+            brand: item.brand,
+            nutriScoreGrade: item.nutriScoreGrade,
+            novaGroup: item.novaGroup,
+            allergenTags: item.allergenList
+                .compactMap(AllergenMatcher.key(forLabel:))
+                .map { "en:\($0)" }
+        )
     }
 }
