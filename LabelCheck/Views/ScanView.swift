@@ -148,7 +148,10 @@ struct ScanView: View {
     private var ocrButton: some View {
         VStack(alignment: .leading, spacing: 8) {
             if ScreenshotMode.isEnabled {
-                Button("Read a label photo (sample)") {
+                // Same label as the real button: this shot is a listing
+                // screenshot, so it shows the app as users see it. The
+                // tap loads bundled sample OCR text instead of the camera.
+                Button("Read a label photo") {
                     ocrText = SampleProducts.ocrSampleText
                 }
                 .buttonStyle(.bordered)

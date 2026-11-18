@@ -85,9 +85,6 @@ struct PaywallView: View {
                             .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
                             .accessibilityIdentifier("buy-\(row.id)")
                         }
-                        Text("Screenshot sample: purchases disabled in screenshot mode.")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
                     } else {
                         Text("Products could not be loaded. Check your connection and try again. Purchases are handled by Apple.")
                             .font(.subheadline)
