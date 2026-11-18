@@ -37,7 +37,7 @@ struct SettingsView: View {
                 // needs, so earlier is better discoverability, not just
                 // framing. The URLs are bare and single-line so neither
                 // wraps.
-                Section("Support", footer: { Text("Version 1.0 (1)") }) {
+                Section {
                     Text("labelcheck.singhsec.com/labelcheck-support")
                         .font(.subheadline)
                         .lineLimit(1)
@@ -46,6 +46,10 @@ struct SettingsView: View {
                         .font(.subheadline)
                         .lineLimit(1)
                         .minimumScaleFactor(0.85)
+                } header: {
+                    Text("Support")
+                } footer: {
+                    Text("Version 1.0 (1)")
                 }
                 // Data attribution lives here, not in its own section:
                 // the list is long enough already, and the Open Food Facts
