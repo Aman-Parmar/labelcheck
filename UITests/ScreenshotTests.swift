@@ -83,6 +83,12 @@ final class ScreenshotTests: XCTestCase {
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings-get-pro-button"].tap()
         XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
+        // Wait for the prices, not just the title: StoreKit products load
+        // async, and the screenshot-mode fallback rows load after them.
+        // Capturing on the title alone caught the loading spinner instead
+        // of the price cards in run 44291564737. "$9.99" appears on both
+        // paths (real product displayPrice, or the .storekit fallback row).
+        XCTAssertTrue(app.staticTexts["$9.99"].waitForExistence(timeout: 10))
         saveScreenshot(named: "06-paywall")
     }
 
