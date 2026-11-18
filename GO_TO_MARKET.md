@@ -15,7 +15,7 @@ One sentence, one job. The differentiator is not the scan — Yuka does that fre
 
 ## Launch checklist
 
-1. Real app icon in `Assets.xcassets/AppIcon.appiconset` (placeholder in v1).
+1. Real app icon in `Assets.xcassets/AppIcon.appiconset` (done 2026-11-18: white barcode + checkmark on leaf-green accent, 1024 master + all sizes).
 2. Support page live: https://labelcheck.singhsec.com/labelcheck-support
 3. Privacy policy live: https://labelcheck.singhsec.com/labelcheck-privacy (text in `privacy-policy.md`)
 4. Apple Developer enrolment ($99) + App Store Connect app created with bundle ID `com.singhsec.labelcheck` (only Aman).
