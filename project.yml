@@ -62,6 +62,14 @@ targets:
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         NSCameraUsageDescription: "LabelCheck uses the camera to scan barcodes and food labels. Images stay on this phone."
+        # Launch screen (Clear Days / PhotoSweep pattern). Without
+        # UILaunchStoryboardName iOS runs the app letterboxed at the
+        # iPhone 4S size (320x480pt, scaled to screen width): run
+        # 44256602033 screenshots proved it, 1320x2868 captures with
+        # the app in a 1320x1980 band and 444px black bars top and
+        # bottom, so the listing screenshots were not full-bleed.
+        # The storyboard also fixes the letterbox on real devices.
+        UILaunchStoryboardName: "LaunchScreen"
   LabelCheckTests:
     type: bundle.unit-test
     platform: iOS
