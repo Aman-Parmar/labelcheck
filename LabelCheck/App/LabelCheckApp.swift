@@ -3,8 +3,10 @@ import SwiftUI
 
 /// LabelCheck — Scan any packaged food, know what's in it in 2 seconds, privately.
 /// No account, no analytics, no ads. All scan history and allergen profiles
-/// live on the device in SwiftData. The only network call is the scanned
-/// barcode sent to Open Food Facts to fetch that product's data.
+/// live on the device in SwiftData. The only data that leaves the phone is the
+/// scanned barcode (to fetch that product), the product category on a D/E card
+/// (to fetch same-category alternatives), and, with Pro, the words typed to
+/// search by product name, all sent only to Open Food Facts.
 @main
 struct LabelCheckApp: App {
     @StateObject private var store = StoreManager()
