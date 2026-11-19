@@ -13,16 +13,10 @@ enum AlternativeProducts {
     /// 2-3 on a D/E product card).
     static let maxAlternatives = 3
 
-    /// Rank of a Nutri-Score grade: A = 0 (best) to E = 4. Nil when the
-    /// grade is unknown, so ungraded products never qualify.
-    static func rank(_ grade: String?) -> Int? {
-        NutriScore.rank(grade)
-    }
-
     /// Whether the product card shows the alternatives section at all:
     /// only on a D or E product, where a higher score exists to show.
     static func showsAlternatives(for product: FoodProduct) -> Bool {
-        guard let rank = rank(product.nutriScoreGrade) else { return false }
+        guard let rank = NutriScore.rank(product.nutriScoreGrade) else { return false }
         return rank >= 3
     }
 
@@ -35,22 +29,22 @@ enum AlternativeProducts {
         current: FoodProduct,
         limit: Int = maxAlternatives
     ) -> [FoodProduct] {
-        guard let currentRank = rank(current.nutriScoreGrade) else { return [] }
+        guard let currentRank = NutriScore.rank(current.nutriScoreGrade) else { return [] }
         var seen: Set<String> = []
         return candidates
             .filter { candidate in
                 guard candidate.barcode != current.barcode,
                       candidate.name?.trimmed
                         .isEmpty == false,
-                      let candidateRank = rank(candidate.nutriScoreGrade),
+                      let candidateRank = NutriScore.rank(candidate.nutriScoreGrade),
                       candidateRank < currentRank,
                       seen.insert(candidate.barcode).inserted
                 else { return false }
                 return true
             }
             .sorted {
-                let left = rank($0.nutriScoreGrade) ?? Int.max
-                let right = rank($1.nutriScoreGrade) ?? Int.max
+                let left = NutriScore.rank($0.nutriScoreGrade) ?? Int.max
+                let right = NutriScore.rank($1.nutriScoreGrade) ?? Int.max
                 if left != right { return left < right }
                 return $0.displayName < $1.displayName
             }
