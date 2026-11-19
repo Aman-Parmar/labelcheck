@@ -319,8 +319,20 @@ struct ScanView: View {
                 }
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("ocr-sample-button")
-            } else {
+            } else if store.isPro {
                 PhotosPicker(selection: $photoItem, matching: .images) {
+                    Label("Read a label photo", systemImage: "text.viewfinder")
+                }
+                .buttonStyle(.bordered)
+                .accessibilityIdentifier("ocr-photo-button")
+            } else {
+                // QA-6: OCR label explain is Pro-only (SUBSCRIPTION_PLAN.md,
+                // paywall, listing). Free users get the paywall, like
+                // search. Same label and identifier as the picker, so the
+                // 01-scan shot and the gate test are unaffected.
+                Button {
+                    showingPaywall = true
+                } label: {
                     Label("Read a label photo", systemImage: "text.viewfinder")
                 }
                 .buttonStyle(.bordered)

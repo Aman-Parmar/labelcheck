@@ -226,6 +226,27 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
     }
 
+    // MARK: - 13 OCR gating (no screenshot)
+
+    /// OCR label explain is Pro-only (QA-6): with a real (non-Pro) store,
+    /// tapping "Read a label photo" must open the paywall instead of the
+    /// photo picker. Relaunches without `--screenshot-mode`, because
+    /// screenshot mode bypasses the gate so test05 can capture the OCR
+    /// result. Runs last alphabetically, so the relaunch cannot disturb
+    /// the earlier shots.
+    func test13OCRGating() {
+        app.terminate()
+        app.launchArguments = []
+        app.launch()
+        app.tabBars.buttons["Scan"].tap()
+        let ocrButton = app.buttons["ocr-photo-button"]
+        for _ in 0..<5 where !ocrButton.isHittable {
+            app.swipeUp()
+        }
+        ocrButton.tap()
+        XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
+    }
+
     // MARK: - Helper
 
     /// Saves the screenshot both as an XCTAttachment (in the xcresult) and
