@@ -40,6 +40,14 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         }
     }
 
+    /// Comma-separated allergen list, e.g. "milk, gluten". Nil when none
+    /// listed. Shared by the product card, the plain-English explainer,
+    /// and history storage, which all had the same join (hygiene dedupe,
+    /// 2026-11-19).
+    var listedAllergens: String? {
+        allergenNames.isEmpty ? nil : allergenNames.joined(separator: ", ")
+    }
+
     init(dto: OpenFoodFactsProductDTO, barcode: String) {
         self.barcode = barcode
         self.name = dto.productName

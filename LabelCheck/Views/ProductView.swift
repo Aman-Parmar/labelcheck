@@ -128,8 +128,8 @@ struct ProductView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            if !product.allergenNames.isEmpty {
-                Text("Listed allergens: \(product.allergenNames.joined(separator: ", "))")
+            if let listed = product.listedAllergens {
+                Text("Listed allergens: \(listed)")
                     .font(.subheadline)
             }
         }

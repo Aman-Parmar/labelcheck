@@ -20,7 +20,7 @@ final class ScannedProduct {
         self.brand = product.brand
         self.nutriScoreGrade = product.nutriScoreGrade
         self.novaGroup = product.novaGroup
-        self.allergens = product.allergenNames.joined(separator: ", ")
+        self.allergens = product.listedAllergens ?? ""
         self.scannedAt = scannedAt
     }
 

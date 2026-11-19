@@ -27,10 +27,10 @@ enum LabelExplainer {
             lines.append("No Nutri-Score is listed for this product.")
         }
         lines.append(NutriScore.novaExplanation(product.novaGroup))
-        if product.allergenNames.isEmpty {
-            lines.append("No allergens are listed for this product.")
+        if let listed = product.listedAllergens {
+            lines.append("Listed allergens: \(listed).")
         } else {
-            lines.append("Listed allergens: \(product.allergenNames.joined(separator: ", ")).")
+            lines.append("No allergens are listed for this product.")
         }
         if let ingredients = product.ingredientsText {
             lines.append("Ingredients: \(ingredients)")
@@ -66,7 +66,7 @@ enum LabelExplainer {
             Product: \(product.displayName).
             Nutri-Score: \(product.nutriScoreGrade ?? "unknown").
             NOVA: \(product.novaGroup.map(String.init) ?? "unknown").
-            Allergens: \(product.allergenNames.joined(separator: ", ")).
+            Allergens: \(product.listedAllergens ?? "none").
             Ingredients: \(product.ingredientsText ?? "not listed").
             """
         do {
