@@ -114,7 +114,9 @@ actor OpenFoodFactsClient {
     /// One search against `cgi/search.pl`. Returns the raw products
     /// (unfiltered); the caller applies any grade cut.
     private func search(queryItems: [URLQueryItem]) async throws -> [FoodProduct] {
-        var components = URLComponents(url: Self.searchURL, resolvingAgainstBaseURL: false)!
+        guard var components = URLComponents(url: Self.searchURL, resolvingAgainstBaseURL: false) else {
+            throw OpenFoodFactsError.badResponse
+        }
         components.queryItems = [URLQueryItem(name: "action", value: "process")] + queryItems
         guard let url = components.url else { throw OpenFoodFactsError.badResponse }
         let request = Self.makeRequest(url: url)
