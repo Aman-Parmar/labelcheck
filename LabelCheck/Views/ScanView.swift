@@ -248,11 +248,7 @@ struct ScanView: View {
                     Text("Nothing in Open Food Facts matched \"\(query)\". Try fewer words, or scan the barcode instead.")
                 }
             case .error(let message):
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Something went wrong")
-                        .font(.headline)
-                    Text(message)
-                }
+                errorCard(message)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -364,17 +360,23 @@ struct ScanView: View {
                         .foregroundStyle(.secondary)
                 }
             case .error(let message):
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Something went wrong")
-                        .font(.headline)
-                    Text(message)
-                }
+                errorCard(message)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
         .accessibilityIdentifier("scan-status-card")
+    }
+
+    /// Shared by the search and scan status cards: same headline and
+    /// message layout, so the two error states can never drift apart.
+    private func errorCard(_ message: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Something went wrong")
+                .font(.headline)
+            Text(message)
+        }
     }
 
     private var disclaimer: some View {
