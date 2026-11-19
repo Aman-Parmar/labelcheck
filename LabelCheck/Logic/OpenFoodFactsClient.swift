@@ -25,6 +25,17 @@ actor OpenFoodFactsClient {
     /// Fields requested on every search, lookup and alternatives alike:
     /// everything the product card shows, plus the barcode itself.
     static let productFields = "code,product_name,brands,nutriscore_grade,nova_group,allergens_tags,ingredients_text,nutriments,image_url,categories_tags"
+    /// Both network calls share one timeout and one search page size.
+    static let requestTimeout: TimeInterval = 15
+    static let searchPageSize = "20"
+
+    /// Every network call goes through here: same User-Agent, same timeout.
+    private static func makeRequest(url: URL) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.setValue(Self.userAgent, forHTTPHeaderField: "User-Agent")
+        request.timeoutInterval = Self.requestTimeout
+        return request
+    }
 
     /// Set to true only in screenshot mode (UITests), where lookups are
     /// served from bundled sample JSON so screenshots are deterministic
@@ -94,7 +105,7 @@ actor OpenFoodFactsClient {
         }
         return try await search(queryItems: [
             URLQueryItem(name: "search_terms", value: clean),
-            URLQueryItem(name: "page_size", value: "20"),
+            URLQueryItem(name: "page_size", value: Self.searchPageSize),
             URLQueryItem(name: "json", value: "1"),
             URLQueryItem(name: "fields", value: Self.productFields),
         ])
@@ -106,9 +117,7 @@ actor OpenFoodFactsClient {
         var components = URLComponents(url: Self.searchURL, resolvingAgainstBaseURL: false)!
         components.queryItems = [URLQueryItem(name: "action", value: "process")] + queryItems
         guard let url = components.url else { throw OpenFoodFactsError.badResponse }
-        var request = URLRequest(url: url)
-        request.setValue(Self.userAgent, forHTTPHeaderField: "User-Agent")
-        request.timeoutInterval = 15
+        let request = Self.makeRequest(url: url)
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {
@@ -131,7 +140,7 @@ actor OpenFoodFactsClient {
             URLQueryItem(name: "tagtype_0", value: "categories"),
             URLQueryItem(name: "tag_contains_0", value: "contains"),
             URLQueryItem(name: "tag_0", value: category),
-            URLQueryItem(name: "page_size", value: "20"),
+            URLQueryItem(name: "page_size", value: Self.searchPageSize),
             URLQueryItem(name: "json", value: "1"),
             URLQueryItem(name: "fields", value: Self.productFields),
         ])
@@ -160,9 +169,7 @@ actor OpenFoodFactsClient {
         }
 
         let url = Self.baseURL.appendingPathComponent("\(clean).json")
-        var request = URLRequest(url: url)
-        request.setValue(Self.userAgent, forHTTPHeaderField: "User-Agent")
-        request.timeoutInterval = 15
+        let request = Self.makeRequest(url: url)
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {
