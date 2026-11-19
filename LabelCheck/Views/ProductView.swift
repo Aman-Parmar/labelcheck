@@ -95,7 +95,7 @@ struct ProductView: View {
                 .background(Color.green.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
             } else {
                 VStack(alignment: .leading, spacing: 6) {
-                    Label("Contains: \(matchedAllergens.joined(separator: ", "))", systemImage: "exclamationmark.triangle.fill")
+                    Label("Contains: \(matchedAllergens.commaJoined)", systemImage: "exclamationmark.triangle.fill")
                         .font(.headline)
                     Text("This matches an allergen in your active profile. Check the physical label before eating. This is not an allergy safety guarantee.")
                         .font(.subheadline)
@@ -110,9 +110,10 @@ struct ProductView: View {
     // MARK: - Scores
 
     private var scoresSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        let score = NutriScore(grade: product.nutriScoreGrade ?? "")
+        return VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 16) {
-                if NutriScore(grade: product.nutriScoreGrade ?? "").badgeLetter != nil {
+                if score.badgeLetter != nil {
                     VStack {
                         NutriScoreBadge(grade: product.nutriScoreGrade, size: 56, font: .largeTitle.bold())
                             .accessibilityIdentifier("nutriscore-badge")
@@ -121,7 +122,7 @@ struct ProductView: View {
                     }
                 }
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(NutriScore(grade: product.nutriScoreGrade ?? "").explanation)
+                    Text(score.explanation)
                         .font(.subheadline)
                     Text(NutriScore.novaExplanation(product.novaGroup))
                         .font(.subheadline)

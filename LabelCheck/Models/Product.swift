@@ -45,7 +45,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
     /// and history storage, which all had the same join (hygiene dedupe,
     /// 2026-11-19).
     var listedAllergens: String? {
-        allergenNames.isEmpty ? nil : allergenNames.joined(separator: ", ")
+        allergenNames.isEmpty ? nil : allergenNames.commaJoined
     }
 
     init(dto: OpenFoodFactsProductDTO, barcode: String) {
@@ -219,6 +219,16 @@ extension String {
     /// Split a comma-separated list, trimming whitespace from each item.
     var commaSeparatedList: [String] {
         split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+    }
+}
+
+extension Array where Element == String {
+    /// Join for display, e.g. ["milk", "gluten"] -> "milk, gluten".
+    /// The inverse of `String.commaSeparatedList`. Shared by the product
+    /// card, the allergen profiles list, and `FoodProduct.listedAllergens`,
+    /// which all had the same join (hygiene dedupe, 2026-11-19).
+    var commaJoined: String {
+        joined(separator: ", ")
     }
 }
 

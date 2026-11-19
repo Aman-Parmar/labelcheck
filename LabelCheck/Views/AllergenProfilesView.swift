@@ -34,7 +34,7 @@ struct AllergenProfilesView: View {
                                     .labelsHidden()
                                     .accessibilityIdentifier("profile-toggle-\(profile.name)")
                                 }
-                                Text(profile.allergenList.compactMap(AllergenMatcher.label(forKey:)).joined(separator: ", "))
+                                Text(profile.allergenList.compactMap(AllergenMatcher.label(forKey:)).commaJoined)
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
                             }
