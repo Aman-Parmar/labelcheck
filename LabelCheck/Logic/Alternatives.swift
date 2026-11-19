@@ -16,14 +16,7 @@ enum AlternativeProducts {
     /// Rank of a Nutri-Score grade: A = 0 (best) to E = 4. Nil when the
     /// grade is unknown, so ungraded products never qualify.
     static func rank(_ grade: String?) -> Int? {
-        switch NutriScore.normalised(grade) {
-        case "a": return 0
-        case "b": return 1
-        case "c": return 2
-        case "d": return 3
-        case "e": return 4
-        default: return nil
-        }
+        NutriScore.rank(grade)
     }
 
     /// Whether the product card shows the alternatives section at all:

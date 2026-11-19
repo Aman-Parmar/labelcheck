@@ -19,15 +19,23 @@ struct NutriScore {
         Self.normalised(grade)?.uppercased()
     }
 
+    /// Rank of a Nutri-Score grade: A = 0 (best) to E = 4. Nil when the
+    /// grade is unknown, so ungraded products never qualify as "higher"
+    /// (used by the LC-1 alternatives picker).
+    static func rank(_ grade: String?) -> Int? {
+        guard let letter = normalised(grade) else { return nil }
+        return ["a", "b", "c", "d", "e"].firstIndex(of: letter)
+    }
+
     /// Plain-language line for the product card. No health verdict.
     var explanation: String {
-        switch Self.normalised(grade) {
-        case "a": return "Nutri-Score A: the highest score in this system."
-        case "b": return "Nutri-Score B in this system."
-        case "c": return "Nutri-Score C in this system."
-        case "d": return "Nutri-Score D in this system."
-        case "e": return "Nutri-Score E: the lowest score in this system."
-        default: return "No Nutri-Score listed for this product."
+        guard let letter = Self.normalised(grade)?.uppercased() else {
+            return "No Nutri-Score listed for this product."
+        }
+        switch letter {
+        case "A": return "Nutri-Score A: the highest score in this system."
+        case "E": return "Nutri-Score E: the lowest score in this system."
+        default: return "Nutri-Score \(letter) in this system."
         }
     }
 

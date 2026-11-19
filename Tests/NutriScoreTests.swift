@@ -14,6 +14,14 @@ final class NutriScoreTests: XCTestCase {
         XCTAssertNil(NutriScore.normalised(""))
     }
 
+    func testRanks() {
+        XCTAssertEqual(NutriScore.rank("a"), 0)
+        XCTAssertEqual(NutriScore.rank("E"), 4)
+        XCTAssertEqual(NutriScore.rank(" c "), 2)
+        XCTAssertNil(NutriScore.rank("z"))
+        XCTAssertNil(NutriScore.rank(nil))
+    }
+
     func testBadgeLetters() {
         XCTAssertEqual(NutriScore(grade: "a").badgeLetter, "A")
         XCTAssertEqual(NutriScore(grade: "e").badgeLetter, "E")
