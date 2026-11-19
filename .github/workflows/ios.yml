@@ -260,7 +260,11 @@ jobs:
             -only-testing:LabelCheckUITests/ScreenshotTests \
             -resultBundlePath build/screenshots-results
           ls -la /tmp/labelcheck-screenshots
-          test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 7
+          # The lane writes exactly nine PNGs (01-scan … 09-search;
+          # test08/test09/test12 are gating checks and save none).
+          # Require all nine: a 7-shot threshold from the v1 lane would
+          # pass with two listing shots missing.
+          test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 9
 
       - name: Upload App Store screenshots
         uses: actions/upload-artifact@v5
