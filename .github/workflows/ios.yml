@@ -124,20 +124,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Select Xcode 26
-        run: |
-          # The macos-26 image ships Xcode as Xcode_26.0.app /
-          # Xcode_26.1.app, etc., never as Xcode_26.app. Resolve the
-          # newest installed Xcode 26.x instead (Clear Days run 42739120071).
-          XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
-          if [ -z "$XCODE_APP" ]; then
-            echo "No Xcode 26.x found under /Applications. Installed Xcodes:"
-            ls -d /Applications/Xcode*.app 2>/dev/null || true
-            exit 1
-          fi
-          echo "Using $XCODE_APP"
-          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
-          xcodebuild -version
-          xcrun simctl list runtimes | head -n 20
+        uses: ./.github/actions/select-xcode-26
 
       - name: Cache Swift Package Manager dependencies
         uses: actions/cache@v5
@@ -198,17 +185,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Select Xcode 26
-        run: |
-          XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
-          if [ -z "$XCODE_APP" ]; then
-            echo "No Xcode 26.x found under /Applications. Installed Xcodes:"
-            ls -d /Applications/Xcode*.app 2>/dev/null || true
-            exit 1
-          fi
-          echo "Using $XCODE_APP"
-          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
-          xcodebuild -version
-          xcrun simctl list runtimes | head -n 20
+        uses: ./.github/actions/select-xcode-26
 
       - name: Cache Swift Package Manager dependencies
         uses: actions/cache@v5
@@ -301,16 +278,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Select Xcode 26
-        run: |
-          XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
-          if [ -z "$XCODE_APP" ]; then
-            echo "No Xcode 26.x found under /Applications. Installed Xcodes:"
-            ls -d /Applications/Xcode*.app 2>/dev/null || true
-            exit 1
-          fi
-          echo "Using $XCODE_APP"
-          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
-          xcodebuild -version
+        uses: ./.github/actions/select-xcode-26
 
       - name: Cache Homebrew downloads
         uses: actions/cache@v5

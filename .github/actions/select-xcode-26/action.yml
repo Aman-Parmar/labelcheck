@@ -1,0 +1,25 @@
+# Select the newest installed Xcode 26.x on a macOS runner.
+#
+# The macos-26 image ships Xcode as Xcode_26.0.app / Xcode_26.1.app, etc.,
+# never as Xcode_26.app. Resolve the newest installed Xcode 26.x instead
+# (Clear Days run 42739120071). Shared by the test, screenshots, and
+# archive jobs so the selection logic lives in one place.
+name: Select Xcode 26
+description: Select the newest installed Xcode 26.x and print its version
+
+runs:
+  using: composite
+  steps:
+    - name: Select Xcode 26
+      shell: bash
+      run: |
+        XCODE_APP=$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n 1)
+        if [ -z "$XCODE_APP" ]; then
+          echo "No Xcode 26.x found under /Applications. Installed Xcodes:"
+          ls -d /Applications/Xcode*.app 2>/dev/null || true
+          exit 1
+        fi
+        echo "Using $XCODE_APP"
+        sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+        xcodebuild -version
+        xcrun simctl list runtimes | head -n 20
