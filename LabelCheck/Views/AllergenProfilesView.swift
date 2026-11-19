@@ -138,9 +138,11 @@ private struct AddProfileView: View {
                             Spacer()
                             if selected.contains(label) {
                                 Image(systemName: "checkmark")
+                                    .accessibilityHidden(true) // Meaning is in the accessibilityValue below.
                             }
                         }
                     }
+                    .accessibilityValue(selected.contains(label) ? "Selected" : "Not selected")
                     .accessibilityIdentifier("allergen-option-\(label)")
                 }
             }
