@@ -31,9 +31,7 @@ struct PaywallView: View {
                     Text("Free keeps unlimited barcode scans and the full product card, forever. No ads, no account, no tracking either way.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                    if store.isLoading {
-                        ProgressView()
-                    } else if !store.products.isEmpty {
+                    if !store.products.isEmpty {
                         ForEach(store.products.sorted(by: { $0.price < $1.price })) { product in
                             Button {
                                 Task {
@@ -68,6 +66,10 @@ struct PaywallView: View {
                         // load under the UITest runner, so shot 06 renders
                         // the same prices from the real bundled
                         // LabelCheck.storekit file, purchases disabled.
+                        // Rendered even while StoreKit is still loading:
+                        // the fetch can stall for longer than the test's
+                        // wait (run 44473439925), and the fallback exists
+                        // precisely so shot 06 does not depend on it.
                         // Never shown in a shipping build.
                         ForEach(sampleRows) { row in
                             HStack {
@@ -86,6 +88,8 @@ struct PaywallView: View {
                             .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
                             .accessibilityIdentifier("buy-\(row.id)")
                         }
+                    } else if store.isLoading {
+                        ProgressView()
                     } else {
                         Text("Products could not be loaded. Check your connection and try again. Purchases are handled by Apple.")
                             .font(.subheadline)
@@ -113,10 +117,16 @@ struct PaywallView: View {
                 }
             }
             .task {
-                await store.loadProducts()
+                // Screenshot mode first: the fallback rows come from the
+                // bundled .storekit file, so they are ready before the
+                // StoreKit fetch returns (or stalls). The paywall must
+                // not wait on the network to show prices under the
+                // UITest runner. Was sequenced after loadProducts, so a
+                // slow fetch starved test06Paywall in run 44473439925.
                 if ScreenshotMode.isEnabled {
                     sampleRows = ScreenshotStoreProducts.load()
                 }
+                await store.loadProducts()
             }
         }
     }
