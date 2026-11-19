@@ -25,8 +25,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
     let categoriesTags: [String]
 
     var displayName: String {
-        name?.trimmingCharacters(in: .whitespacesAndNewlines)
-            .nilIfEmpty ?? "Unknown product"
+        name.displayNameOrUnknown
     }
 
     var displayBrand: String? {
@@ -212,5 +211,14 @@ extension String {
     /// Split a comma-separated list, trimming whitespace from each item.
     var commaSeparatedList: [String] {
         split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+    }
+}
+
+extension Optional where Wrapped == String {
+    /// Trimmed value, or "Unknown product" when nil or blank. Shared by
+    /// `FoodProduct.displayName` and `ScannedProduct.displayName`, which
+    /// had identical bodies (hygiene dedupe, 2026-11-19).
+    var displayNameOrUnknown: String {
+        self?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty ?? "Unknown product"
     }
 }

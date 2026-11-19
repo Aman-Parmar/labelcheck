@@ -29,8 +29,7 @@ final class ScannedProduct {
     }
 
     var displayName: String {
-        name?.trimmingCharacters(in: .whitespacesAndNewlines)
-            .nilIfEmpty ?? "Unknown product"
+        name.displayNameOrUnknown
     }
 }
 
