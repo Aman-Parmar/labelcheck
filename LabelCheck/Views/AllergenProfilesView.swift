@@ -59,6 +59,7 @@ struct AllergenProfilesView: View {
                     } label: {
                         Image(systemName: "plus")
                     }
+                    .accessibilityLabel("Add allergen profile")
                     .accessibilityIdentifier("add-profile-button")
                 }
             }

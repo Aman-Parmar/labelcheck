@@ -103,6 +103,7 @@ struct HistoryView: View {
                         } label: {
                             Image(systemName: "square.and.arrow.up")
                         }
+                        .accessibilityLabel("Export history as CSV")
                         .accessibilityIdentifier("history-export-button")
                     }
                     ToolbarItem(placement: .topBarTrailing) {
