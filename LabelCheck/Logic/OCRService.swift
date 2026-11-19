@@ -1,4 +1,3 @@
-import Foundation
 import Vision
 
 /// On-device OCR for the nutrition / ingredients panel, used when a barcode
