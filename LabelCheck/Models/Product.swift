@@ -208,4 +208,9 @@ extension String {
     var nilIfEmpty: String? {
         isEmpty ? nil : self
     }
+
+    /// Split a comma-separated list, trimming whitespace from each item.
+    var commaSeparatedList: [String] {
+        split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+    }
 }

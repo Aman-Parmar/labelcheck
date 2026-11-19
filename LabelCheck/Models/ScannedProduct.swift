@@ -25,7 +25,7 @@ final class ScannedProduct {
     }
 
     var allergenList: [String] {
-        allergens.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        allergens.commaSeparatedList
     }
 
     var displayName: String {
@@ -53,6 +53,6 @@ final class AllergenProfile {
     }
 
     var allergenList: [String] {
-        allergens.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        allergens.commaSeparatedList
     }
 }
