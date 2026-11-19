@@ -162,7 +162,7 @@ struct ScanView: View {
                     lookup(barcode: manualBarcode)
                 }
                 .buttonStyle(.bordered)
-                .disabled(manualBarcode.trimmingCharacters(in: .whitespaces).isEmpty || isLoading)
+                .disabled(manualBarcode.isBlank || isLoading)
                 .accessibilityIdentifier("manual-lookup-button")
             }
             Text("Only the barcode is sent to Open Food Facts to fetch that product. Nothing else leaves the phone.")
@@ -186,7 +186,7 @@ struct ScanView: View {
                     runSearch()
                 }
                 .buttonStyle(.bordered)
-                .disabled(searchText.trimmingCharacters(in: .whitespaces).isEmpty || isSearching)
+                .disabled(searchText.isBlank || isSearching)
                 .accessibilityIdentifier("search-button")
             }
             Text("Search is a Pro feature. The words you type are sent to Open Food Facts to find matching products. Nothing else leaves the phone.")
@@ -258,7 +258,7 @@ struct ScanView: View {
     }
 
     private func runSearch() {
-        let clean = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let clean = searchText.trimmed
         guard !clean.isEmpty, !isSearching else { return }
         // Pro gate: search is Pro-only, like Yuka. Screenshot mode
         // bypasses the gate so the lane can capture real results offline;
@@ -389,7 +389,7 @@ struct ScanView: View {
     // MARK: - Lookup
 
     private func lookup(barcode: String) {
-        let clean = barcode.trimmingCharacters(in: .whitespacesAndNewlines)
+        let clean = barcode.trimmed
         guard !clean.isEmpty, !isLoading else { return }
         isLoading = true
         status = nil

@@ -9,7 +9,7 @@ struct NutriScore {
 
     /// Normalised grade letter, "a"..."e", or nil when unknown.
     static func normalised(_ raw: String?) -> String? {
-        guard let letter = raw?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let letter = raw?.trimmed
             .lowercased(), ("a"..."e").contains(letter) else { return nil }
         return letter
     }

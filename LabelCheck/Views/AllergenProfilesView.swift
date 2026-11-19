@@ -163,7 +163,7 @@ private struct AddProfileView: View {
                 Button("Save") {
                     let keys = selected.compactMap(AllergenMatcher.key(forLabel:))
                     modelContext.insert(AllergenProfile(
-                        name: name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "My profile" : name,
+                        name: name.isBlank ? "My profile" : name,
                         allergens: keys
                     ))
                     try? modelContext.save()

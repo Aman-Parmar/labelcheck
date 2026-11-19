@@ -29,7 +29,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
     }
 
     var displayBrand: String? {
-        brand?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        brand?.trimmed.nilIfEmpty
     }
 
     /// Plain allergen names, e.g. ["milk", "gluten"].
@@ -216,9 +216,22 @@ extension String {
         isEmpty ? nil : self
     }
 
+    /// Whitespace trimmed from both ends. Shared by every lookup, search,
+    /// and display-name path, which all had the same
+    /// `trimmingCharacters(in: .whitespacesAndNewlines)` call
+    /// (hygiene dedupe, 2026-11-19).
+    var trimmed: String {
+        trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// True when the string is empty or only whitespace.
+    var isBlank: Bool {
+        trimmed.isEmpty
+    }
+
     /// Split a comma-separated list, trimming whitespace from each item.
     var commaSeparatedList: [String] {
-        split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+        split(separator: ",").map { $0.trimmed }
     }
 }
 
@@ -237,6 +250,6 @@ extension Optional where Wrapped == String {
     /// `FoodProduct.displayName` and `ScannedProduct.displayName`, which
     /// had identical bodies (hygiene dedupe, 2026-11-19).
     var displayNameOrUnknown: String {
-        self?.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty ?? "Unknown product"
+        self?.trimmed.nilIfEmpty ?? "Unknown product"
     }
 }

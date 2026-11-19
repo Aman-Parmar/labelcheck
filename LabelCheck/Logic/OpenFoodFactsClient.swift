@@ -87,7 +87,7 @@ actor OpenFoodFactsClient {
     /// screenshot mode the bundled sample products are filtered locally
     /// (offline, deterministic); no network call is made.
     func searchByName(_ query: String) async throws -> [FoodProduct] {
-        let clean = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        let clean = query.trimmed
         guard !clean.isEmpty else { return [] }
         if useSampleData {
             return SampleProducts.search(query: clean)
@@ -140,7 +140,7 @@ actor OpenFoodFactsClient {
     /// Returns nil when the barcode is not in Open Food Facts. Throws on
     /// network failure or a bad response so the UI can show a retry state.
     func fetchProduct(barcode: String) async throws -> FoodProduct? {
-        let clean = barcode.trimmingCharacters(in: .whitespacesAndNewlines)
+        let clean = barcode.trimmed
         guard !clean.isEmpty else { return nil }
         if let cached = cache[clean] { return cached }
 

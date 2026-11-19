@@ -40,7 +40,7 @@ enum AlternativeProducts {
         return candidates
             .filter { candidate in
                 guard candidate.barcode != current.barcode,
-                      candidate.name?.trimmingCharacters(in: .whitespacesAndNewlines)
+                      candidate.name?.trimmed
                         .isEmpty == false,
                       let candidateRank = rank(candidate.nutriScoreGrade),
                       candidateRank < currentRank,
