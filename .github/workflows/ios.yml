@@ -61,11 +61,6 @@ concurrency:
   group: ios-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  SCHEME: LabelCheck
-  BUNDLE_ID: com.singhsec.labelcheck
-  XCODE_VERSION: "26.0"
-
 jobs:
   # ------------------------------------------------------------------
   # Job 1: Linux. Fast, cheap, catches logic errors before macOS.
