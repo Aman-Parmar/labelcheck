@@ -59,6 +59,11 @@ targets:
         # the built app. So every key the app needs must be listed here.
         CFBundleName: LabelCheck
         ITSAppUsesNonExemptEncryption: false
+        # LSRequiresIPhoneOS was in the checked-in plist but NOT here, so
+        # XcodeGen dropped it on every generate (LESSONS.md §4). It is the
+        # Xcode template default for iOS apps; keep it explicit so the
+        # generated plist matches the checked-in one.
+        LSRequiresIPhoneOS: true
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         NSCameraUsageDescription: "LabelCheck uses the camera to scan barcodes and food labels. Images stay on this phone."

@@ -32,6 +32,7 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 
 - Never add a key only to a checked-in `Info.plist`. XcodeGen rewrites every target Info.plist from `project.yml` and drops it. Every Info.plist key (camera usage description, display name, etc.) must be in `project.yml` under the target's `info.properties`.
 - Never commit a `.xcodeproj`. Regenerate with `xcodegen generate`.
+- Drift found 2026-11-18 (hygiene audit): the checked-in plist carried `LSRequiresIPhoneOS` and `UIApplicationSceneManifest`, neither in `project.yml` — XcodeGen's auto-generated list covers the eight `CFBundle*` keys but not these two, so every CI generate silently dropped them. Fix: `LSRequiresIPhoneOS: true` moved into `project.yml` (Xcode template default for iOS apps); `UIApplicationSceneManifest` deleted from the checked-in plist (inert under the SwiftUI App lifecycle, single scene is the default). Audit the plist against `project.yml` + XcodeGen's auto-generated list whenever either file changes.
 
 ## 5. Security — standing rule
 
