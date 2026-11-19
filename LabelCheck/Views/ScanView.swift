@@ -338,7 +338,7 @@ struct ScanView: View {
                 .buttonStyle(.bordered)
                 .accessibilityIdentifier("ocr-photo-button")
             }
-            Text("No barcode, or product not found? Read the ingredients panel from a photo. The text is recognised on this phone.")
+            Text("No barcode, or product not found? Read the ingredients panel from a photo. Reading a label is a Pro feature. The text is recognised on this phone.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
