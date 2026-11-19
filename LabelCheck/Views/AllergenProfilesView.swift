@@ -84,6 +84,7 @@ struct AllergenProfilesView: View {
             Image(systemName: "exclamationmark.shield")
                 .font(.system(size: 48))
                 .foregroundStyle(.secondary)
+                .accessibilityHidden(true) // Decorative; the heading below says the same thing.
             Text("No allergen profiles yet")
                 .font(.title3.bold())
             Text("Add a profile, for example milk and peanut, and every product card will flag matches. Matching happens on this phone.")

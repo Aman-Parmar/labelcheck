@@ -245,6 +245,7 @@ struct ProductView: View {
                                         Image(systemName: "chevron.right")
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
+                                            .accessibilityHidden(true) // Decorative; the row is labelled by name and brand.
                                     }
                                 }
                                 .buttonStyle(.plain)

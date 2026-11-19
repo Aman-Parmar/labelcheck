@@ -30,6 +30,8 @@ struct NutriScoreBadge: View {
                 .foregroundStyle(.white)
                 .frame(width: size, height: size)
                 .background(nutriScoreColor(letter), in: Circle())
+                // VoiceOver otherwise reads a bare letter with no context.
+                .accessibilityLabel("Nutri-Score \(letter)")
         }
     }
 }

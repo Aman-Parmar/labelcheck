@@ -131,6 +131,7 @@ struct HistoryView: View {
             Image(systemName: "clock.arrow.circlepath")
                 .font(.system(size: 48))
                 .foregroundStyle(.secondary)
+                .accessibilityHidden(true) // Decorative; the "No scans yet" heading follows.
             Text("No scans yet")
                 .font(.title3.bold())
             Text("Scan a barcode and it will show up here, on this phone only.")

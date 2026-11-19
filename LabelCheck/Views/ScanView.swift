@@ -112,6 +112,7 @@ struct ScanView: View {
             Image(systemName: "barcode.viewfinder")
                 .font(.system(size: 48))
                 .foregroundStyle(Color.accentColor)
+                .accessibilityHidden(true) // Decorative; the heading below says the same thing.
                 .accessibilityIdentifier("scan-icon")
             Text("Scan any packaged food")
                 .font(.title3.bold())
