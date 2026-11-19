@@ -231,7 +231,7 @@ extension String {
 
     /// Split a comma-separated list, trimming whitespace from each item.
     var commaSeparatedList: [String] {
-        split(separator: ",").map { $0.trimmed }
+        split(separator: ",").map { String($0).trimmed }
     }
 }
 
