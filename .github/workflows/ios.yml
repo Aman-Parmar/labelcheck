@@ -80,7 +80,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Check Swift version
         run: swift --version
@@ -121,13 +121,13 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Select Xcode 26
         uses: ./.github/actions/select-xcode-26
 
       - name: Cache Swift Package Manager dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ~/Library/Caches/org.swift.swiftpm
@@ -137,7 +137,7 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Cache Homebrew downloads
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/Homebrew
           key: ${{ runner.os }}-homebrew-${{ hashFiles('**/project.yml') }}
@@ -162,7 +162,7 @@ jobs:
 
       - name: Upload test results on failure
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: test-results
           path: build/test-results
@@ -182,13 +182,13 @@ jobs:
     timeout-minutes: 60
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Select Xcode 26
         uses: ./.github/actions/select-xcode-26
 
       - name: Cache Swift Package Manager dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: |
             ~/Library/Caches/org.swift.swiftpm
@@ -198,7 +198,7 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Cache Homebrew downloads
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/Homebrew
           key: ${{ runner.os }}-homebrew-${{ hashFiles('**/project.yml') }}
@@ -239,7 +239,7 @@ jobs:
           test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 9
 
       - name: Upload App Store screenshots
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: app-store-screenshots
           path: /tmp/labelcheck-screenshots
@@ -247,7 +247,7 @@ jobs:
 
       - name: Upload screenshots results on failure
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: screenshots-results
           path: |
@@ -275,13 +275,13 @@ jobs:
       APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Select Xcode 26
         uses: ./.github/actions/select-xcode-26
 
       - name: Cache Homebrew downloads
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/Library/Caches/Homebrew
           key: ${{ runner.os }}-homebrew-${{ hashFiles('**/project.yml') }}

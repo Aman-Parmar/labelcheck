@@ -10,6 +10,7 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 - Cache Homebrew installs + SPM/DerivedData. The repo is public (flipped back from private by Aman 2026-11-17 ~23:21 ET): public repos get free unlimited Actions minutes, including macOS. Optimise for wall-clock, but keep the lanes lean anyway.
 - Batch independent low-risk changes into **one commit / one CI cycle**. Do not push tiny commits that each trigger a full run.
 - Wait for CI in the same run where possible — do not leave verification to the next run. Slow poll only: one `gh run view` per check, sleep at least 180 seconds between checks, at most ~8 checks. NEVER use `gh run watch` — it polls every 3 seconds and exhausts the GitHub API rate limit (403), blocking ALL gh calls for about an hour (hit 2026-11-18). If any gh call returns a 403 rate limit, STOP all gh calls immediately and wait for the window to reset; do not retry in a loop.
+- GitHub actions pinned to v6 (2026-11-19): checkout/cache/upload-artifact v6 is the Node 24 generation; v5 drew a Node 20 deprecation annotation on every run. v6 release notes verified: runtime bump only, no input changes for this workflow, GitHub-hosted runners satisfy the minimum runner version. v7 exists (upload-artifact 7.0.2, checkout 7.0.1, cache 6.1.0) but was not adopted — its changes were not reviewed; bump one major at a time and read the release notes first.
 
 ## 2. Screenshots — real, never mockups
 
