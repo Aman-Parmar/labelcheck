@@ -7,7 +7,7 @@ Recorded honestly, 2026-11-17. Three research agents looked at this concept from
 ### 1. API agent: Open Food Facts ranked #1
 
 - Open Food Facts API v3 is the best public API for this brief: free, no key, no account, generous rate limits (15 product reads/min/IP, 10 searches/min/IP), ODbL licensed, and built for exactly this lookup — barcode in, product out, with Nutri-Score, NOVA, allergens, ingredients, and nutriments.
-- v2 is deprecated. The app builds on v3: `GET https://world.openfoodfacts.org/api/v3/product/{barcode}.json`, `User-Agent: LabelCheck/1.0 (aman@threatrepel.com)`.
+- v2 is deprecated. The app builds on v3: `GET https://world.openfoodfacts.org/api/v3/product/{barcode}.json`, `User-Agent: LabelCheck/1.0 (support@singhsec.com)`.
 - Verified in the wild: Nutella `3017620422003` (Nutri-Score E, NOVA 4, ~539 kcal/100 g, sugars ~56.3 g) and Coca-Cola `5449000000996` (Nutri-Score E, NOVA 4, 42 kcal/100 g, sugars 10.6 g) resolve as documented. Sample data in `LabelCheck/SampleData/` is a snapshot of these public entries.
 - Commercial use is allowed under ODbL with attribution, which the app and README carry.
 

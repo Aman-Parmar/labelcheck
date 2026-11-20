@@ -4,7 +4,7 @@ import Foundation
 /// Product lookup: GET https://world.openfoodfacts.org/api/v3/product/{barcode}.json
 /// Category search (LC-1 alternatives): GET https://world.openfoodfacts.org/cgi/search.pl
 /// Name search (LC-3): same search endpoint, `search_terms` instead of a category tag.
-/// User-Agent: LabelCheck/1.0 (aman@threatrepel.com)
+/// User-Agent: LabelCheck/1.0 (support@singhsec.com)
 /// Rate limits (per IP): 15 product reads/min, 10 searches/min.
 /// Only the scanned barcode (lookup), the product's category tag
 /// (alternatives search), or the words the user typed (name search) is
@@ -19,7 +19,7 @@ import Foundation
 /// Data is crowdsourced (ODbL). The app never auto-trusts it: every product
 /// card shows a "verify on the physical label" state.
 actor OpenFoodFactsClient {
-    static let userAgent = "LabelCheck/1.0 (aman@threatrepel.com)"
+    static let userAgent = "LabelCheck/1.0 (support@singhsec.com)"
     static let baseURL = URL(string: "https://world.openfoodfacts.org/api/v3/product")!
     static let searchURL = URL(string: "https://world.openfoodfacts.org/cgi/search.pl")!
     /// Fields requested on every search, lookup and alternatives alike:

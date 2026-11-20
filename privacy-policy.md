@@ -1,8 +1,8 @@
 # LabelCheck — Privacy Policy
 
-Last updated: November 18, 2026.
+Last updated: November 19, 2026.
 
-LabelCheck is published by Aman Parmar (ThreatRepel). Contact: aman@threatrepel.com.
+LabelCheck is published by Aman Parmar. Contact: support@singhsec.com.
 
 ## Summary
 
@@ -35,4 +35,4 @@ If this policy changes, the new version will be posted at https://labelcheck.sin
 
 ## Contact
 
-Questions about this policy: aman@threatrepel.com.
+Questions about this policy: support@singhsec.com.

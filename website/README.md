@@ -12,10 +12,9 @@ These are the exact URLs in App Store Connect (see `app-store-listing.md`):
 - Privacy: https://labelcheck.singhsec.com/labelcheck-privacy
 
 The privacy page text matches `privacy-policy.md` in the repo root. The support
-page contact is aman@threatrepel.com, the same address the privacy policy
-publishes. It can be swapped for a dedicated support@labelcheck.singhsec.com
-alias once that mailbox exists; the listing needs a real support email before
-submission either way.
+page contact is support@singhsec.com, the same address the privacy policy
+publishes. That address must exist as a Hostinger email forwarder to Aman's
+Gmail before submission, or support mail to it will bounce.
 
 Rule (Aman, 2026-11-09): each app gets its own subdomain on singhsec.com.
 LabelCheck is labelcheck.singhsec.com. Never touch blogs.singhsec.com.
