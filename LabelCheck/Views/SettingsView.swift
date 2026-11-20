@@ -56,7 +56,7 @@ struct SettingsView: View {
                 // credit plus the general-information disclaimer must stay
                 // visible at rest in the listing screenshot.
                 Section("Privacy") {
-                    Text("No account. No analytics. No ads. No tracking. Deleting the app deletes your history and profiles.")
+                    Text("No account. No analytics. No ads. No tracking. Deleting the app deletes your history, favorites, and profiles.")
                     Text("Only the scanned barcode, the product category, and (Pro) your search words leave this phone. History, favorites, and profiles stay on this phone.")
                     Text("Product data: Open Food Facts (ODbL).")
                     Text("General information only, not medical or dietary advice, and not an allergy safety guarantee.")
