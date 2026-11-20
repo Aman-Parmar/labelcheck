@@ -346,14 +346,43 @@ final class ScreenshotTests: XCTestCase {
 
     // MARK: - 18 Diet filters (screenshot)
 
-    /// Diet filters: screenshot mode seeds the Maya profile with vegan,
-    /// gluten-free, and no-seed-oils. Kinder Bueno is non-vegan and
-    /// lists gluten in the live data (verified 2026-11-19), and its only
-    /// oil is palm oil, so the shot shows two fails and one pass. The
-    /// section sits below the scores on the product card, so it gets its
-    /// own shot like the additives section. Runs last alphabetically,
-    /// so it cannot disturb the earlier shots; it only navigates.
+    /// Diet filters: Kinder Bueno is non-vegan and lists gluten in the
+    /// live data (verified 2026-11-19), and its only oil is palm oil,
+    /// so the shot shows two fails and one pass. The section sits below
+    /// the scores on the product card, so it gets its own shot like the
+    /// additives section. Runs last alphabetically, so it cannot
+    /// disturb the earlier shots; it only navigates.
+    ///
+    /// Ordering trap: test08 deletes the seeded Maya/Leo profiles and
+    /// adds a Sam profile with no diet filters, so the diet section
+    /// would be hidden by test18 time if it relied on the seed. This
+    /// test builds its own diet profile first (delete Sam, add one
+    /// with all three filters), mirroring test08's proven pattern.
+    /// The second-profile Pro gate does not apply: the add form opens
+    /// because the list is empty when it is tapped.
     func test18DietFilters() {
+        app.tabBars.buttons["Allergens"].tap()
+        XCTAssertTrue(app.staticTexts["Sam"].waitForExistence(timeout: 10))
+        let cell = app.cells.containing(.staticText, identifier: "Sam").element
+        cell.swipeLeft()
+        // Same retry as test08: the swipe-to-delete reveal can miss on
+        // a loaded CI runner.
+        if !app.buttons["Delete"].waitForExistence(timeout: 3) {
+            cell.swipeLeft()
+            XCTAssertTrue(app.buttons["Delete"].waitForExistence(timeout: 5))
+        }
+        app.buttons["Delete"].tap()
+        XCTAssertTrue(app.buttons["add-profile-empty-button"].waitForExistence(timeout: 10))
+        app.buttons["add-profile-empty-button"].tap()
+        let nameField = app.textFields["profile-name-field"]
+        XCTAssertTrue(nameField.waitForExistence(timeout: 10))
+        nameField.tap()
+        nameField.typeText("Alex")
+        app.buttons["diet-option-vegan"].tap()
+        app.buttons["diet-option-gluten-free"].tap()
+        app.buttons["diet-option-no-seed-oils"].tap()
+        app.buttons["save-profile-button"].tap()
+        XCTAssertTrue(app.staticTexts["Alex"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Scan"].tap()
         let field = app.textFields["manual-barcode-field"]
         field.tap()

@@ -14,7 +14,8 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 
 ## 2. Screenshots — real, never mockups
 
-- 9-shot lane on the iPhone 17 Pro Max simulator: 01-scan, 02-product card, 03-allergens, 04-history, 05-OCR fallback, 06-paywall, 07-settings, 08-alternatives, 09-search (`UITests/ScreenshotTests.swift`). 08 added 2026-11-18 with LC-1 (alternatives section sits below the fold on the card, so it gets its own shot); 09 added 2026-11-18 with LC-3 (search-by-name results).
+- 14-shot lane on the iPhone 17 Pro Max simulator: 01-scan, 02-product card, 03-allergens, 04-history, 05-OCR fallback, 06-paywall, 07-settings, 08-alternatives, 09-search, 10-favorites, 11-lists, 12-additives, 13-not-found, 14-diet-filters (`UITests/ScreenshotTests.swift`). 08 added 2026-11-18 with LC-1 (alternatives section sits below the fold on the card, so it gets its own shot); 09 added 2026-11-18 with LC-3 (search-by-name results); 10/11 added 2026-11-19 with Favorites/lists; 12 added 2026-11-19 with the additive explainer; 13 added 2026-11-19 with the add/report links; 14 added 2026-11-19 with diet filters.
+- The lane shares one simulator store across tests, in alphabetical order: test08 deletes the seeded Maya/Leo profiles, so any later test that needs a profile must build its own (test18 deletes Sam and adds a diet profile first). Never rely on seeded state after test08.
 - Screenshot-mode sample data only: a fixed set of 3 known Open Food Facts barcodes/products with bundled sample JSON (`LabelCheck/SampleData/SampleProducts.json`), so screenshots are deterministic and offline. Never mockups, never Figma.
 - Every future update comes with real simulator screenshots from CI.
 - Verify framing after every run: scan button, Nutri-Score badge, and allergen banner fully visible in each shot, no clipping.
