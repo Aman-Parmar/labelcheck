@@ -100,7 +100,10 @@ final class ShoppingListsTests: XCTestCase {
         let list = try XCTUnwrap(ShoppingList.create(name: "Weekly shop", in: context))
         list.add(product: nutella, in: context)
         list.add(product: cola, in: context)
-        list.items.first?.toggleChecked(in: context)
+        // A relationship array has no guaranteed order, so find the item
+        // by barcode instead of assuming it is first.
+        let nutellaItem = try XCTUnwrap(list.items.first { $0.barcode == nutella.barcode })
+        nutellaItem.toggleChecked(in: context)
         list.clearChecked(in: context)
         XCTAssertEqual(list.items.count, 1)
         XCTAssertEqual(list.items.first?.barcode, cola.barcode)
