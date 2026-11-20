@@ -119,6 +119,10 @@ enum ScreenshotSeeder {
         modelContext.insert(AllergenProfile(
             name: "Maya",
             allergens: ["milk", "tree-nut", "peanut"],
+            // Diet filters: seeded so the 14-diet-filters shot shows the
+            // section. Kinder Bueno is non-vegan and lists gluten, so the
+            // shot shows two fails and one pass.
+            dietFilters: ["vegan", "gluten-free", "no-seed-oils"],
             isActive: true
         ))
         // A second profile so the 03-allergens listing shot shows the list

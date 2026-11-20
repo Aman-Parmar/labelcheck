@@ -37,6 +37,11 @@ struct AllergenProfilesView: View {
                                 Text(profile.allergenList.compactMap(AllergenMatcher.label(forKey:)).commaJoined)
                                     .font(.subheadline)
                                     .foregroundStyle(.secondary)
+                                if !profile.dietFilterList.isEmpty {
+                                    Text(profile.dietFilterList.compactMap(DietFilter.init(rawValue:)).map(\.label).commaJoined)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
                             }
                         }
                         .onDelete(perform: delete)
@@ -87,7 +92,7 @@ struct AllergenProfilesView: View {
                 .accessibilityHidden(true) // Decorative; the heading below says the same thing.
             Text("No allergen profiles yet")
                 .font(.title3.bold())
-            Text("Add a profile, for example milk and peanut, and every product card will flag matches. Matching happens on this phone.")
+            Text("Add a profile, for example milk and peanut, and every product card will flag matches. You can also add diet filters such as vegan or gluten-free. Matching happens on this phone.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -114,6 +119,7 @@ private struct AddProfileView: View {
 
     @State private var name = ""
     @State private var selected: Set<String> = []
+    @State private var selectedDiets: Set<String> = []
 
     var body: some View {
         // No inner NavigationStack: this view is pushed onto the
@@ -151,6 +157,29 @@ private struct AddProfileView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+            Section("Diet filters") {
+                ForEach(DietFilter.allCases, id: \.rawValue) { filter in
+                    Button {
+                        if selectedDiets.contains(filter.rawValue) {
+                            selectedDiets.remove(filter.rawValue)
+                        } else {
+                            selectedDiets.insert(filter.rawValue)
+                        }
+                    } label: {
+                        HStack {
+                            Text(filter.label)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            if selectedDiets.contains(filter.rawValue) {
+                                Image(systemName: "checkmark")
+                                    .accessibilityHidden(true) // Meaning is in the accessibilityValue below.
+                            }
+                        }
+                    }
+                    .accessibilityValue(selectedDiets.contains(filter.rawValue) ? "Selected" : "Not selected")
+                    .accessibilityIdentifier("diet-option-\(filter.rawValue)")
+                }
+            }
         }
         .navigationTitle("New profile")
         .navigationBarTitleDisplayMode(.inline)
@@ -166,12 +195,15 @@ private struct AddProfileView: View {
                     let keys = selected.compactMap(AllergenMatcher.key(forLabel:))
                     modelContext.insert(AllergenProfile(
                         name: name.isBlank ? "My profile" : name,
-                        allergens: keys
+                        allergens: keys,
+                        dietFilters: DietFilter.allCases
+                            .map(\.rawValue)
+                            .filter { selectedDiets.contains($0) }
                     ))
                     try? modelContext.save()
                     dismiss()
                 }
-                .disabled(selected.isEmpty)
+                .disabled(selected.isEmpty && selectedDiets.isEmpty)
                 .accessibilityIdentifier("save-profile-button")
             }
         }

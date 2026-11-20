@@ -24,7 +24,7 @@ actor OpenFoodFactsClient {
     static let searchURL = URL(string: "https://world.openfoodfacts.org/cgi/search.pl")!
     /// Fields requested on every search, lookup and alternatives alike:
     /// everything the product card shows, plus the barcode itself.
-    static let productFields = "code,product_name,brands,nutriscore_grade,nova_group,allergens_tags,ingredients_text,nutriments,image_url,categories_tags,additives_tags"
+    static let productFields = "code,product_name,brands,nutriscore_grade,nova_group,allergens_tags,ingredients_text,nutriments,image_url,categories_tags,additives_tags,ingredients_analysis_tags,labels_tags"
     /// Both network calls share one timeout and one search page size.
     static let requestTimeout: TimeInterval = 15
     static let searchPageSize = "20"

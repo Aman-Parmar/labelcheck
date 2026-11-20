@@ -47,6 +47,7 @@ These rules are carried over from the Clear Days build, verbatim in spirit. They
 - Never say "healthy" or "unhealthy". Nutri-Score and NOVA are general information from Open Food Facts, not health verdicts. Enforced by `Tests/NutriScoreTests.swift`.
 - Never present an allergen match as a safety guarantee. Every product card and every OCR result says to check the physical label.
 - Open Food Facts is crowdsourced: show "not found / verify" states, never auto-trust.
+- Diet filters read Open Food Facts tags, never guesses: "maybe-vegan" and a missing vegan tag both read as unknown, never a pass; the gluten-free label exists under two spellings ("en:gluten-free" and "en:no-gluten", Nutella carries the latter); bare "flour" is not a gluten signal (rice flour is gluten-free); palm oil is a fruit oil, not a seed oil. Values verified live 2026-11-19 and pinned in `Tests/DietFilterTests.swift`.
 - Sample data is labelled as sample data, in the file and in this document. Screenshot values are a snapshot, not live data.
 - Foundation Models is a gated iOS 26+ enhancement, never the core value prop. iOS 26 context is 4096 tokens, not 8192 — keep prompts short.
 

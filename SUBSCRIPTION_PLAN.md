@@ -20,6 +20,7 @@
 | Favorites (save products to re-check later) | Yes | Yes |
 | Shopping lists (group favorites into lists for the weekly shop) | Yes | Yes |
 | Allergen profiles | 1 profile | Multiple profiles |
+| Diet filters (vegan, gluten-free, no seed oils) | On the first profile | On every profile |
 | OCR label explain | No | Yes |
 | Search by product name | No | Yes |
 | History export | No | Yes |

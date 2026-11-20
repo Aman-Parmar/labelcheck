@@ -16,7 +16,7 @@ Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and sh
 
 No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. The only things that leave the phone are the barcode you scan, sent to Open Food Facts to fetch that product, and, on a product with Nutri-Score D or E, that product's category, sent to fetch same-category products with a higher Nutri-Score. With Pro, the words you type in search are also sent to Open Food Facts to find matching products.
 
-Set up allergen profiles for yourself or your family, and every product card flags matches on your phone, before you buy.
+Set up allergen profiles for yourself or your family, and every product card flags matches on your phone, before you buy. Add diet filters to a profile, vegan, gluten-free, or no seed oils, and every product card shows whether the product matches, from Open Food Facts data.
 
 Once you have scanned a product, you can open it again with no signal: the full product details are cached on your phone.
 
@@ -39,7 +39,7 @@ barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, foo
 
 Food & Drink (primary), Health & Fitness (secondary — only if review allows; the app gives general information, not health advice)
 
-## Screenshots (13, from the CI lane)
+## Screenshots (14, from the CI lane)
 
 1. 01-scan — Scan tab
 2. 02-product-card — Nutella product card with Nutri-Score badge
@@ -54,6 +54,7 @@ Food & Drink (primary), Health & Fitness (secondary — only if review allows; t
 11. 11-lists — Shopping list for the weekly shop
 12. 12-additives — Additives explained on the Coca-Cola card
 13. 13-not-found — Product not found, with the link to add it on Open Food Facts
+14. 14-diet-filters — Diet filters on the Kinder Bueno card
 
 ## Support URL
 

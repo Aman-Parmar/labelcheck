@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 13 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 14 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -342,6 +342,38 @@ final class ScreenshotTests: XCTestCase {
             app.swipeUp()
         }
         saveScreenshot(named: "13-not-found")
+    }
+
+    // MARK: - 18 Diet filters (screenshot)
+
+    /// Diet filters: screenshot mode seeds the Maya profile with vegan,
+    /// gluten-free, and no-seed-oils. Kinder Bueno is non-vegan and
+    /// lists gluten in the live data (verified 2026-11-19), and its only
+    /// oil is palm oil, so the shot shows two fails and one pass. The
+    /// section sits below the scores on the product card, so it gets its
+    /// own shot like the additives section. Runs last alphabetically,
+    /// so it cannot disturb the earlier shots; it only navigates.
+    func test18DietFilters() {
+        app.tabBars.buttons["Scan"].tap()
+        let field = app.textFields["manual-barcode-field"]
+        field.tap()
+        field.typeText("3017620690969")
+        app.buttons["manual-lookup-button"].tap()
+        XCTAssertTrue(app.staticTexts["product-name"].waitForExistence(timeout: 10))
+        // Wait on the section heading text, not the section container's
+        // identifier: see test02.
+        XCTAssertTrue(app.staticTexts["Diet filters"].waitForExistence(timeout: 10))
+        // Scroll the section into view: the card is a ScrollView, so a
+        // swipe moves it (unlike the Lists in test04/test07). Stop as
+        // soon as the heading is tappable.
+        let heading = app.staticTexts["Diet filters"]
+        for _ in 0..<5 where !heading.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(app.staticTexts["Listed as non-vegan by Open Food Facts."].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["Gluten is listed in the allergens or ingredients."].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts["No seed oils listed in the ingredients."].waitForExistence(timeout: 10))
+        saveScreenshot(named: "14-diet-filters")
     }
 
     // MARK: - Helper

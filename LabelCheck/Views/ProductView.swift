@@ -39,12 +39,21 @@ struct ProductView: View {
         )
     }
 
+    /// Diet filters enabled on the active profiles, in canonical order
+    /// (vegan, gluten-free, no seed oils), deduplicated. Empty when no
+    /// active profile has a diet filter: the section hides then.
+    private var activeDietFilters: [DietFilter] {
+        let keys = Set(activeProfiles.flatMap { $0.dietFilterList })
+        return DietFilter.allCases.filter { keys.contains($0.rawValue) }
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 header
                 allergenBanner
                 scoresSection
+                dietSection
                 nutrimentsSection
                 ingredientsSection
                 additivesSection
@@ -164,6 +173,52 @@ struct ProductView: View {
             if let listed = product.listedAllergens {
                 Text("Listed allergens: \(listed)")
                     .font(.subheadline)
+            }
+        }
+    }
+
+    // MARK: - Diet filters
+
+    /// Diet filters from the active profiles (vegan, gluten-free, no
+    /// seed oils), matched on-device against the product data the card
+    /// already fetched. Hidden when no active profile has a diet filter,
+    /// so cards look exactly as before for everyone else. A fail is a
+    /// mismatch, not a hazard, so it reads orange, not the allergen
+    /// red. Never a verdict: each row states what the data lists.
+    private var dietSection: some View {
+        Group {
+            let filters = activeDietFilters
+            if !filters.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Diet filters")
+                        .font(.headline)
+                    ForEach(filters, id: \.rawValue) { filter in
+                        let result = DietFilterChecker.check(filter, product: product)
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: result.symbolName)
+                                .foregroundStyle(
+                                    result.status == .pass ? .green
+                                    : result.status == .fail ? .orange : .secondary
+                                )
+                                .accessibilityHidden(true) // Meaning is in the row text below.
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(filter.label)
+                                    .font(.subheadline.bold())
+                                Text(result.detail)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    Text("From Open Food Facts data. General information only, not dietary advice. Check the physical label.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                // See additivesSection: a plain VStack's identifier does
+                // not surface in the XCUI tree, so the container is
+                // grouped and the heading text is the wait target.
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("diet-filters-section")
             }
         }
     }

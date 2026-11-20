@@ -28,6 +28,15 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
     /// none: crowdsourced entries often leave this blank even when the
     /// ingredients text names an additive, so the section hides then.
     let additivesTags: [String]
+    /// Ingredients-analysis tags, e.g. ["en:vegan", "en:non-vegan",
+    /// "en:maybe-vegan"]. Used by the diet filters (vegan check).
+    /// Empty when the entry lists none: "maybe" and missing both read
+    /// as unknown, never as a pass.
+    let ingredientsAnalysisTags: [String]
+    /// Label tags, e.g. ["en:gluten-free", "en:no-gluten"]. Used by the
+    /// diet filters (gluten-free check). Both spellings exist in the
+    /// data. Empty when the entry lists none.
+    let labelsTags: [String]
 
     var displayName: String {
         name.displayNameOrUnknown
@@ -65,6 +74,8 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         self.imageURL = dto.imageURL.flatMap(URL.init(string:))
         self.categoriesTags = dto.categoriesTags ?? []
         self.additivesTags = dto.additivesTags ?? []
+        self.ingredientsAnalysisTags = dto.ingredientsAnalysisTags ?? []
+        self.labelsTags = dto.labelsTags ?? []
     }
 
     init(
@@ -78,7 +89,9 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         nutriments: Nutriments = Nutriments(),
         imageURL: URL? = nil,
         categoriesTags: [String] = [],
-        additivesTags: [String] = []
+        additivesTags: [String] = [],
+        ingredientsAnalysisTags: [String] = [],
+        labelsTags: [String] = []
     ) {
         self.barcode = barcode
         self.name = name
@@ -91,6 +104,8 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         self.imageURL = imageURL
         self.categoriesTags = categoriesTags
         self.additivesTags = additivesTags
+        self.ingredientsAnalysisTags = ingredientsAnalysisTags
+        self.labelsTags = labelsTags
     }
 }
 
@@ -174,6 +189,8 @@ struct OpenFoodFactsProductDTO: Decodable {
     let imageURL: String?
     let categoriesTags: [String]?
     let additivesTags: [String]?
+    let ingredientsAnalysisTags: [String]?
+    let labelsTags: [String]?
     /// Present in category-search results; the product lookup endpoint
     /// puts the barcode in the URL instead. Nil on the lookup path.
     let code: String?
@@ -189,6 +206,8 @@ struct OpenFoodFactsProductDTO: Decodable {
         case imageURL = "image_url"
         case categoriesTags = "categories_tags"
         case additivesTags = "additives_tags"
+        case ingredientsAnalysisTags = "ingredients_analysis_tags"
+        case labelsTags = "labels_tags"
         case code
     }
 }
