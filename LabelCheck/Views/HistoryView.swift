@@ -14,11 +14,19 @@ struct HistoryView: View {
     @State private var selectedProduct: FoodProduct?
     @State private var showingPaywall = false
     @State private var showingExporter = false
+    @State private var searchText = ""
 
     private static let freeHistoryLimit = 10
 
     private var visibleItems: [ScannedProduct] {
         store.isPro ? scanned : Array(scanned.prefix(Self.freeHistoryLimit))
+    }
+
+    /// Search filters the visible rows (the free 10-scan cap still
+    /// applies: free users search the scans they can see, Pro users
+    /// search all of them). Blank query shows everything.
+    private var filteredItems: [ScannedProduct] {
+        HistorySearch.filter(visibleItems, query: searchText)
     }
 
     private var hiddenCount: Int {
@@ -32,7 +40,11 @@ struct HistoryView: View {
                     emptyState
                 } else {
                     List {
-                        ForEach(visibleItems) { item in
+                        if filteredItems.isEmpty {
+                            Text("No scans match \"\(searchText.trimmed)\"")
+                                .foregroundStyle(.secondary)
+                        }
+                        ForEach(filteredItems) { item in
                             Button {
                                 // LC-2: open the full cached product when
                                 // one exists, so a History tap works with
@@ -81,7 +93,10 @@ struct HistoryView: View {
                             .buttonStyle(.plain)
                         }
                         .onDelete(perform: delete)
-                        if hiddenCount > 0 {
+                        // The upsell is about scans hidden by the free
+                        // cap; while searching, the list is filtered, so
+                        // showing it would read as a search result.
+                        if hiddenCount > 0 && searchText.isBlank {
                             Button("See all \(scanned.count) scans with Pro") {
                                 showingPaywall = true
                             }
@@ -95,6 +110,7 @@ struct HistoryView: View {
                 }
             }
             .navigationTitle("History")
+            .searchable(text: $searchText, prompt: "Search history")
             .navigationDestination(item: $selectedProduct) { product in
                 ProductView(product: product)
             }
@@ -153,8 +169,10 @@ struct HistoryView: View {
     }
 
     private func delete(at offsets: IndexSet) {
+        // Offsets refer to the rows the list shows, which is the
+        // filtered list while a search is active.
         for index in offsets {
-            modelContext.delete(visibleItems[index])
+            modelContext.delete(filteredItems[index])
         }
         try? modelContext.save()
     }

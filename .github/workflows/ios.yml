@@ -11,7 +11,7 @@
 # What this pipeline does, in order:
 #   1. Linux job: cheap lint and Foundation-only logic tests (bills at 1x).
 #   2. macOS test job: full Xcode build + unit tests on the simulator.
-#   3. macOS screenshots job: the fourteen App Store screenshots on the
+#   3. macOS screenshots job: the fifteen App Store screenshots on the
 #      iPhone 17 Pro Max simulator. Push to main only.
 #   4. macOS archive job: archive + TestFlight upload. Push to main
 #      only, and only once the signing secrets exist (it exits
@@ -218,7 +218,7 @@ jobs:
           # The screenshot tests launch the app in --screenshot-mode
           # (bundled sample data, no network) on the iPhone 17 Pro Max
           # simulator (1320x2868, the primary App Store size) and write
-          # fourteen PNGs to /tmp/labelcheck-screenshots. A clean status bar
+          # fifteen PNGs to /tmp/labelcheck-screenshots. A clean status bar
           # (9:41, full signal, full battery) is set before the lane runs.
           # Push to main only: screenshots cost macOS minutes, and pull
           # requests already get the unit tests plus a compile of the
@@ -232,11 +232,11 @@ jobs:
             -only-testing:LabelCheckUITests/ScreenshotTests \
             -resultBundlePath build/screenshots-results
           ls -la /tmp/labelcheck-screenshots
-          # The lane writes exactly fourteen PNGs (01-scan … 14-diet-filters;
+          # The lane writes exactly fifteen PNGs (01-scan … 15-history-search;
           # test08/test09/test12/test13 are gating checks and save none).
-          # Require all fourteen: a 9-shot threshold from the v1 lane would
+          # Require all fifteen: a 9-shot threshold from the v1 lane would
           # pass with two listing shots missing.
-          test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 14
+          test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 15
 
       - name: Upload App Store screenshots
         uses: actions/upload-artifact@v6

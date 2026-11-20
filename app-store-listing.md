@@ -39,7 +39,7 @@ barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, foo
 
 Food & Drink (primary), Health & Fitness (secondary — only if review allows; the app gives general information, not health advice)
 
-## Screenshots (14, from the CI lane)
+## Screenshots (15, from the CI lane)
 
 1. 01-scan — Scan tab
 2. 02-product-card — Nutella product card with Nutri-Score badge
@@ -55,6 +55,7 @@ Food & Drink (primary), Health & Fitness (secondary — only if review allows; t
 12. 12-additives — Additives explained on the Coca-Cola card
 13. 13-not-found — Product not found, with the link to add it on Open Food Facts
 14. 14-diet-filters — Diet filters on the Kinder Bueno card
+15. 15-history-search — History filtered to Nutella by search
 
 ## Support URL
 

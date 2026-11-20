@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 14 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 15 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -412,6 +412,26 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Gluten is listed in the allergens or ingredients."].waitForExistence(timeout: 10))
         XCTAssertTrue(app.staticTexts["No seed oils listed in the ingredients."].waitForExistence(timeout: 10))
         saveScreenshot(named: "14-diet-filters")
+    }
+
+    // MARK: - 19 History search (screenshot)
+
+    /// History search: typing "nutella" filters the seeded history
+    /// (Nutella, Coca-Cola, Kinder Bueno) down to the one Nutella row.
+    /// Runs last alphabetically, so it cannot disturb the earlier shots;
+    /// it only navigates within the History tab. The search field is
+    /// the `.searchable` prompt "Search history", visible at rest
+    /// above the list.
+    func test19HistorySearch() {
+        app.tabBars.buttons["History"].tap()
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        let searchField = app.searchFields["Search history"]
+        XCTAssertTrue(searchField.waitForExistence(timeout: 10))
+        searchField.tap()
+        searchField.typeText("nutella")
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["Coca-Cola"].waitForExistence(timeout: 3))
+        saveScreenshot(named: "15-history-search")
     }
 
     // MARK: - Helper
