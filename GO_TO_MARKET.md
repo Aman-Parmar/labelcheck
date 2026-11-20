@@ -8,7 +8,7 @@ One sentence, one job. The differentiator is not the scan — Yuka does that fre
 
 ## Channels — ASO first
 
-- App Store Optimisation first: name, subtitle, keywords, screenshots (see `app-store-listing.md`). The 9 CI screenshots are the listing screenshots.
+- App Store Optimisation first: name, subtitle, keywords, screenshots (see `app-store-listing.md`). The 15 CI screenshots are the listing screenshots.
 - Product-as-marketing: shareable product cards (v1.1) — a scanned product shared by a user is the ad.
 - Channels NOT used: LinkedIn cyber audience, Reddit promotion, Google Ads. Apple Search Ads only on Aman's call, and only after the listing converts from organic traffic.
 - No spend authorised. No paid acquisition until the 90-day gate is passed (below).
