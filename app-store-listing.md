@@ -20,6 +20,8 @@ Set up allergen profiles for yourself or your family, and every product card fla
 
 Once you have scanned a product, you can open it again with no signal: the full product details are cached on your phone.
 
+Tap the heart on any product card to save it in Favorites, so the products you buy every week are one tap away. Favorites stay on your phone, free for everyone.
+
 No barcode, or product not found? Photograph the ingredients panel and LabelCheck reads it on your phone.
 
 Free: unlimited barcode scans and the full product card, forever.
@@ -37,7 +39,7 @@ barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, foo
 
 Food & Drink (primary), Health & Fitness (secondary — only if review allows; the app gives general information, not health advice)
 
-## Screenshots (9, from the CI lane)
+## Screenshots (10, from the CI lane)
 
 1. 01-scan — Scan tab
 2. 02-product-card — Nutella product card with Nutri-Score badge
@@ -48,6 +50,7 @@ Food & Drink (primary), Health & Fitness (secondary — only if review allows; t
 7. 07-settings — Settings and privacy
 8. 08-alternatives — Higher Nutri-Score alternatives on the Nutella card
 9. 09-search — Search by product name, Pro feature
+10. 10-favorites — Favorites tab
 
 ## Support URL
 

@@ -40,7 +40,17 @@ struct HistoryView: View {
                                 // fields stored on the row (no ingredients
                                 // or nutrition data) when nothing is cached.
                                 Task {
-                                    selectedProduct = await fullProduct(for: item)
+                                    selectedProduct = await fullProduct(
+                                        barcode: item.barcode,
+                                        name: item.name,
+                                        brand: item.brand,
+                                        nutriScoreGrade: item.nutriScoreGrade,
+                                        novaGroup: item.novaGroup,
+                                        allergenTags: item.allergenList
+                                            .compactMap(AllergenMatcher.key(forLabel:))
+                                            .map { "en:\($0)" },
+                                        in: modelContext.container
+                                    )
                                 }
                             } label: {
                                 HStack {
@@ -147,24 +157,5 @@ struct HistoryView: View {
             modelContext.delete(visibleItems[index])
         }
         try? modelContext.save()
-    }
-
-    /// The full product for a history row: the cached payload when one
-    /// exists (LC-2), otherwise the summary fields stored on the row.
-    private func fullProduct(for item: ScannedProduct) async -> FoodProduct {
-        let store = ProductPayloadStore(container: modelContext.container)
-        if let cached = await store.load(barcode: item.barcode) {
-            return cached
-        }
-        return FoodProduct(
-            barcode: item.barcode,
-            name: item.name,
-            brand: item.brand,
-            nutriScoreGrade: item.nutriScoreGrade,
-            novaGroup: item.novaGroup,
-            allergenTags: item.allergenList
-                .compactMap(AllergenMatcher.key(forLabel:))
-                .map { "en:\($0)" }
-        )
     }
 }

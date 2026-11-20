@@ -11,6 +11,7 @@ import SwiftData
 /// - `OpenFoodFactsClient` serves the 3 bundled sample products instead of
 ///   the network (see `SampleProducts.json`).
 /// - History is seeded with those 3 products and two allergen profiles.
+/// - Favorites is seeded with the first 2 sample products.
 /// - The "Read a label photo" button shows the bundled sample OCR text
 ///   instead of opening the photo picker.
 ///
@@ -101,6 +102,11 @@ enum ScreenshotSeeder {
                 scannedAt: now.addingTimeInterval(TimeInterval(-index * 3600))
             )
             modelContext.insert(scanned)
+        }
+        // Favorites: seed the first two samples so the 10-favorites shot
+        // shows a list, not the empty state.
+        for product in SampleProducts.all.prefix(2) {
+            modelContext.insert(FavoriteProduct(product: product))
         }
         modelContext.insert(AllergenProfile(
             name: "Maya",

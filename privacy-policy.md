@@ -6,7 +6,7 @@ LabelCheck is published by Aman Parmar (ThreatRepel). Contact: aman@threatrepel.
 
 ## Summary
 
-LabelCheck collects nothing about you. There is no account, no analytics, no advertising, and no tracking. Your scan history and allergen profiles stay on your phone. The only data that leaves your phone is the barcode you scan, sent to Open Food Facts to fetch that product's information, and, on a product with Nutri-Score D or E, that product's category, sent to Open Food Facts to fetch same-category products with a higher Nutri-Score. With Pro, the words you type when you search by product name are also sent to Open Food Facts to find matching products.
+LabelCheck collects nothing about you. There is no account, no analytics, no advertising, and no tracking. Your scan history, favorites, and allergen profiles stay on your phone. The only data that leaves your phone is the barcode you scan, sent to Open Food Facts to fetch that product's information, and, on a product with Nutri-Score D or E, that product's category, sent to Open Food Facts to fetch same-category products with a higher Nutri-Score. With Pro, the words you type when you search by product name are also sent to Open Food Facts to find matching products.
 
 ## What the app does with your data
 
@@ -14,7 +14,7 @@ LabelCheck collects nothing about you. There is no account, no analytics, no adv
 - **Product categories for alternatives.** On a product card with Nutri-Score D or E, the app sends that product's category (for example, "chocolate spreads") to Open Food Facts to fetch same-category products with a higher Nutri-Score. Only the category is sent. No name, email, location, or device identifier is sent with it.
 - **Search words (Pro).** When you search by product name, the app sends the words you typed to Open Food Facts to find matching products. Only those words are sent. No name, email, location, or device identifier is sent with them.
 - **Camera and photos.** The camera is used to scan barcodes, and a photo you choose is used to read a label. Images are processed on your phone (Apple Vision and Natural Language frameworks) and are never uploaded anywhere.
-- **Scan history and allergen profiles.** Stored on your phone only, in the app's local database. They are never synced, shared, or uploaded. Deleting the app deletes them. The full details of each product you scan are also cached on your phone, so you can re-open a scanned product with no signal; the cache is never synced, shared, or uploaded either.
+- **Scan history, favorites, and allergen profiles.** Stored on your phone only, in the app's local database. They are never synced, shared, or uploaded. Deleting the app deletes them. The full details of each product you scan are also cached on your phone, so you can re-open a scanned product with no signal; the cache is never synced, shared, or uploaded either.
 - **Purchases.** Pro purchases are handled by Apple through StoreKit. The app never sees your card number or payment details. Apple may share a transaction record with us through App Store Connect for accounting; we do not use it for advertising or profiling.
 
 ## What we do not collect

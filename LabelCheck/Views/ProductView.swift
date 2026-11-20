@@ -8,11 +8,16 @@ import SwiftUI
 struct ProductView: View {
     let product: FoodProduct
 
+    @Environment(\.modelContext) private var modelContext
+
     @Query(filter: #Predicate<AllergenProfile> { $0.isActive })
     private var activeProfiles: [AllergenProfile]
 
     @State private var modelExplanation: String?
     @State private var explaining = false
+    // Favorites: heart toggle, free for every user. Loaded on appear
+    // because the favorite state lives in SwiftData, not in the product.
+    @State private var isFavorite = false
 
     // LC-1 alternatives: same-category products with a higher Nutri-Score.
     // Loaded once when the card appears; nil while loading, empty when
@@ -47,12 +52,24 @@ struct ProductView: View {
             .padding()
         }
         .task {
+            isFavorite = FavoriteProduct.isFavorite(barcode: product.barcode, in: modelContext)
             await loadAlternatives()
         }
         // Detail screens use the full screen: hide the floating tab bar on
         // push, so the card is never half-hidden behind the pill (the 02
         // listing shot caught the Nutri-Score section under it).
         .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isFavorite = FavoriteProduct.toggle(product: product, in: modelContext)
+                } label: {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                }
+                .accessibilityLabel(isFavorite ? "Remove from favorites" : "Save to favorites")
+                .accessibilityIdentifier("favorite-toggle-button")
+            }
+        }
         .navigationTitle(product.displayName)
         .navigationBarTitleDisplayMode(.inline)
         // Tapping an alternative pushes its own card on the same stack.

@@ -16,7 +16,7 @@ struct LabelCheckApp: App {
             ContentView()
                 .environmentObject(store)
         }
-        .modelContainer(for: [ScannedProduct.self, AllergenProfile.self, CachedProduct.self])
+        .modelContainer(for: [ScannedProduct.self, AllergenProfile.self, CachedProduct.self, FavoriteProduct.self])
     }
 }
 
@@ -32,6 +32,10 @@ struct ContentView: View {
             HistoryView()
                 .tabItem {
                     Label("History", systemImage: "clock.arrow.circlepath")
+                }
+            FavoritesView()
+                .tabItem {
+                    Label("Favorites", systemImage: "heart")
                 }
             AllergenProfilesView()
                 .tabItem {

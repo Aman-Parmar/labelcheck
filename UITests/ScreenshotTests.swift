@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 9 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 10 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -245,6 +245,18 @@ final class ScreenshotTests: XCTestCase {
         }
         ocrButton.tap()
         XCTAssertTrue(app.staticTexts["LabelCheck Pro"].waitForExistence(timeout: 10))
+    }
+
+    // MARK: - 14 Favorites (screenshot)
+
+    /// Favorites tab: screenshot mode seeds the first two sample products
+    /// (Nutella, Coca-Cola) as favorites, so the shot shows a list, not
+    /// the empty state. Runs last alphabetically, so it cannot disturb the
+    /// earlier shots; it only navigates.
+    func test14Favorites() {
+        app.tabBars.buttons["Favorites"].tap()
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        saveScreenshot(named: "10-favorites")
     }
 
     // MARK: - Helper

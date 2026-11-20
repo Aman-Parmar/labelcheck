@@ -17,6 +17,7 @@
 | Plain-English label explain (deterministic card) | Yes | Yes |
 | On-device AI explain (iOS 26+, iPhone 15 Pro+) | Yes, when available | Yes, when available |
 | Scan history | Most recent 10 | Unlimited |
+| Favorites (save products to re-check later) | Yes | Yes |
 | Allergen profiles | 1 profile | Multiple profiles |
 | OCR label explain | No | Yes |
 | Search by product name | No | Yes |
