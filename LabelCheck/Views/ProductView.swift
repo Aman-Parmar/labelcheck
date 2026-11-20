@@ -47,6 +47,7 @@ struct ProductView: View {
                 scoresSection
                 nutrimentsSection
                 ingredientsSection
+                additivesSection
                 explainSection
                 alternativesSection
                 sourceFooter
@@ -201,6 +202,52 @@ struct ProductView: View {
             Text(product.ingredientsText ?? "No ingredients listed for this product.")
                 .font(.subheadline)
                 .foregroundStyle(product.ingredientsText == nil ? .secondary : .primary)
+        }
+    }
+
+    // MARK: - Additives
+
+    /// Plain-English additive explainer: what each E-number on the
+    /// label is and what it does, from the curated on-device list.
+    /// Hidden when the entry lists no additives: crowdsourced entries
+    /// often leave additives_tags blank, and an empty section would
+    /// look like a claim that the product has none. Never a verdict:
+    /// the rows say what an additive does, never whether it is good
+    /// or bad for you.
+    private var additivesSection: some View {
+        Group {
+            let rows = AdditiveExplainer.rows(for: product)
+            if !rows.isEmpty {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Additives")
+                        .font(.headline)
+                    ForEach(rows, id: \.code) { row in
+                        VStack(alignment: .leading, spacing: 2) {
+                            if let note = row.note {
+                                Text("\(row.code): \(note.name)")
+                                    .font(.subheadline.bold())
+                                Text(note.explanation)
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text(row.code)
+                                    .font(.subheadline.bold())
+                                Text("No plain-English note for this one yet.")
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    Text("Names and jobs from the E-number list on Wikipedia. General information only, not a safety verdict. Check the physical label.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                // See alternativesSection: a plain VStack's identifier
+                // does not surface in the XCUI tree, so the container is
+                // grouped and the heading text is the wait target.
+                .accessibilityElement(children: .contain)
+                .accessibilityIdentifier("additives-section")
+            }
         }
     }
 

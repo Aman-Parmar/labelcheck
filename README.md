@@ -14,6 +14,7 @@ A native iOS food-label scanner. Scan a barcode, get the product card: name, bra
 
 - Scan a barcode (camera) or type the digits under it — unlimited scans, free, forever
 - Product card: name, brand, Nutri-Score A–E, NOVA group 1–4, listed allergens, ingredients, nutrition per 100 g
+- Additive explainer: every E-number on the card explained in plain English (what it is, what it does), from the public E-number list; no verdict, free for everyone
 - Allergen profiles: set the allergens you watch for; every product card flags matches on-device
 - OCR fallback: photograph an ingredients panel when the barcode is not in the database; allergens are extracted on-device and you confirm them
 - History: every scan saved on the phone (free shows the most recent 10, Pro unlimited)
@@ -121,7 +122,7 @@ Or press Cmd-U in Xcode. Unit tests live in `Tests/` and cover Open Food Facts p
 
 ### 7. Screenshots
 
-The screenshot lane is a UI test target (`UITests/ScreenshotTests.swift`). It launches the app in `--screenshot-mode` (bundled sample data, no network) and captures eleven shots on the iPhone 17 Pro Max simulator. In CI it runs in parallel with the unit tests; locally:
+The screenshot lane is a UI test target (`UITests/ScreenshotTests.swift`). It launches the app in `--screenshot-mode` (bundled sample data, no network) and captures twelve shots on the iPhone 17 Pro Max simulator. In CI it runs in parallel with the unit tests; locally:
 
 ```bash
 xcodebuild test \

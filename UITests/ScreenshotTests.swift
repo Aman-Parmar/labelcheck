@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 11 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 12 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -283,6 +283,35 @@ final class ScreenshotTests: XCTestCase {
         list.tap()
         XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
         saveScreenshot(named: "11-lists")
+    }
+
+    // MARK: - 16 Additives (screenshot)
+
+    /// Additives explainer: Coca-Cola lists E150d and E338 in the live
+    /// data (verified 2026-11-19), both covered by the curated list, so
+    /// the shot shows two explained rows. The section sits below the
+    /// fold on the product card, so it gets its own shot like the
+    /// alternatives section. Runs last alphabetically, so it cannot
+    /// disturb the earlier shots; it only navigates.
+    func test16Additives() {
+        app.tabBars.buttons["Scan"].tap()
+        let field = app.textFields["manual-barcode-field"]
+        field.tap()
+        field.typeText("5449000000996")
+        app.buttons["manual-lookup-button"].tap()
+        XCTAssertTrue(app.staticTexts["product-name"].waitForExistence(timeout: 10))
+        // Wait on the section heading text, not the section container's
+        // identifier: see test02.
+        XCTAssertTrue(app.staticTexts["Additives"].waitForExistence(timeout: 10))
+        // Scroll the section into view: the card is a ScrollView, so a
+        // swipe moves it (unlike the Lists in test04/test07). Stop as
+        // soon as the heading is tappable.
+        let heading = app.staticTexts["Additives"]
+        for _ in 0..<5 where !heading.isHittable {
+            app.swipeUp()
+        }
+        XCTAssertTrue(heading.waitForExistence(timeout: 10))
+        saveScreenshot(named: "12-additives")
     }
 
     // MARK: - Helper

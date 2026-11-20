@@ -23,6 +23,11 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
     /// "en:chocolate-spreads"]. Used to find same-category products with
     /// a higher Nutri-Score (LC-1). Empty when the entry lists none.
     let categoriesTags: [String]
+    /// Additive tags, e.g. ["en:e322", "en:e150d"]. Shown in plain
+    /// English by the additive explainer. Empty when the entry lists
+    /// none: crowdsourced entries often leave this blank even when the
+    /// ingredients text names an additive, so the section hides then.
+    let additivesTags: [String]
 
     var displayName: String {
         name.displayNameOrUnknown
@@ -59,6 +64,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         self.nutriments = Nutriments(dto: dto.nutriments)
         self.imageURL = dto.imageURL.flatMap(URL.init(string:))
         self.categoriesTags = dto.categoriesTags ?? []
+        self.additivesTags = dto.additivesTags ?? []
     }
 
     init(
@@ -71,7 +77,8 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         ingredientsText: String? = nil,
         nutriments: Nutriments = Nutriments(),
         imageURL: URL? = nil,
-        categoriesTags: [String] = []
+        categoriesTags: [String] = [],
+        additivesTags: [String] = []
     ) {
         self.barcode = barcode
         self.name = name
@@ -83,6 +90,7 @@ struct FoodProduct: Identifiable, Equatable, Hashable {
         self.nutriments = nutriments
         self.imageURL = imageURL
         self.categoriesTags = categoriesTags
+        self.additivesTags = additivesTags
     }
 }
 
@@ -165,6 +173,7 @@ struct OpenFoodFactsProductDTO: Decodable {
     let nutriments: OpenFoodFactsNutrimentsDTO?
     let imageURL: String?
     let categoriesTags: [String]?
+    let additivesTags: [String]?
     /// Present in category-search results; the product lookup endpoint
     /// puts the barcode in the URL instead. Nil on the lookup path.
     let code: String?
@@ -179,6 +188,7 @@ struct OpenFoodFactsProductDTO: Decodable {
         case nutriments
         case imageURL = "image_url"
         case categoriesTags = "categories_tags"
+        case additivesTags = "additives_tags"
         case code
     }
 }

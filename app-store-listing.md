@@ -12,7 +12,7 @@ Scan food labels, privately.
 
 Scan any packaged food, know what's in it in 2 seconds, privately.
 
-Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g.
+Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g. Every additive on the card is explained in plain English: what each E-number is and what it does, from the public E-number list.
 
 No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. The only things that leave the phone are the barcode you scan, sent to Open Food Facts to fetch that product, and, on a product with Nutri-Score D or E, that product's category, sent to fetch same-category products with a higher Nutri-Score. With Pro, the words you type in search are also sent to Open Food Facts to find matching products.
 
@@ -39,7 +39,7 @@ barcode scanner, food label, allergens, Nutri-Score, ingredients, nutrition, foo
 
 Food & Drink (primary), Health & Fitness (secondary — only if review allows; the app gives general information, not health advice)
 
-## Screenshots (11, from the CI lane)
+## Screenshots (12, from the CI lane)
 
 1. 01-scan — Scan tab
 2. 02-product-card — Nutella product card with Nutri-Score badge
@@ -52,6 +52,7 @@ Food & Drink (primary), Health & Fitness (secondary — only if review allows; t
 9. 09-search — Search by product name, Pro feature
 10. 10-favorites — Favorites tab
 11. 11-lists — Shopping list for the weekly shop
+12. 12-additives — Additives explained on the Coca-Cola card
 
 ## Support URL
 
