@@ -48,7 +48,7 @@ enum AdditiveExplainer {
         "e133": AdditiveNote(code: "e133", name: "Brilliant Blue", explanation: "A colour. It gives food a blue colour."),
         "e150a": AdditiveNote(code: "e150a", name: "Plain caramel", explanation: "A colour. It gives food a brown colour."),
         "e150d": AdditiveNote(code: "e150d", name: "Sulphite ammonia caramel", explanation: "A colour. It gives food a brown colour."),
-        "e160a": AdditiveNote(code: "e160a", name: "Carotenes", explanation: "A colour. It gives food a red to brown colour."),
+        "e160a": AdditiveNote(code: "e160a", name: "Carotenes", explanation: "A colour. It gives food a yellow-orange to brown colour."),
         "e162": AdditiveNote(code: "e162", name: "Beetroot Red", explanation: "A colour. It gives food a red colour."),
         "e163": AdditiveNote(code: "e163", name: "Anthocyanins", explanation: "A colour. It gives food a purple-red colour."),
         // Preservatives (E200-299).
