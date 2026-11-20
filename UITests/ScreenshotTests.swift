@@ -378,9 +378,18 @@ final class ScreenshotTests: XCTestCase {
         XCTAssertTrue(nameField.waitForExistence(timeout: 10))
         nameField.tap()
         nameField.typeText("Alex")
-        app.buttons["diet-option-vegan"].tap()
-        app.buttons["diet-option-gluten-free"].tap()
-        app.buttons["diet-option-no-seed-oils"].tap()
+        // The Diet filters section sits at the bottom of the form,
+        // below 14 allergen rows: scroll it into view first, or the
+        // buttons never enter the XCUI tree (Form rows are lazy, and
+        // the first run failed tapping diet-option-vegan with no match).
+        for rawValue in ["vegan", "gluten-free", "no-seed-oils"] {
+            let option = app.buttons["diet-option-\(rawValue)"]
+            for _ in 0..<5 where !option.exists {
+                app.swipeUp()
+            }
+            XCTAssertTrue(option.waitForExistence(timeout: 10))
+            option.tap()
+        }
         app.buttons["save-profile-button"].tap()
         XCTAssertTrue(app.staticTexts["Alex"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Scan"].tap()
