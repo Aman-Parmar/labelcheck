@@ -328,11 +328,17 @@ final class ScreenshotTests: XCTestCase {
         app.buttons["manual-lookup-button"].tap()
         XCTAssertTrue(app.staticTexts["Not found"].waitForExistence(timeout: 10))
         // The status card sits below the OCR section: scroll it into
-        // view. The link label is the wait target; a Link's identifier
-        // does not surface reliably in the XCUI tree.
-        let linkLabel = app.staticTexts["Add this product to Open Food Facts"]
-        XCTAssertTrue(linkLabel.waitForExistence(timeout: 10))
-        for _ in 0..<5 where !linkLabel.isHittable {
+        // view. A SwiftUI Link surfaces as a Button in the XCUI tree,
+        // never as a StaticText: waiting on the static text waited the
+        // full 10 s and never found it (CI run 44672621564), though the
+        // link renders. Fall back to the links query in case a future
+        // iOS exposes Link as XCUIElementTypeLink instead.
+        let linkButton = app.buttons["Add this product to Open Food Facts"]
+        let linkFound = linkButton.waitForExistence(timeout: 10)
+            || app.links["Add this product to Open Food Facts"].waitForExistence(timeout: 5)
+        XCTAssertTrue(linkFound)
+        let link = linkButton.exists ? linkButton : app.links["Add this product to Open Food Facts"]
+        for _ in 0..<5 where !link.isHittable {
             app.swipeUp()
         }
         saveScreenshot(named: "13-not-found")
