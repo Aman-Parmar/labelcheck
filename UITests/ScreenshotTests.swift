@@ -123,6 +123,14 @@ final class ScreenshotTests: XCTestCase {
         for name in ["Maya", "Leo"] {
             let cell = app.cells.containing(.staticText, identifier: name).element
             cell.swipeLeft()
+            // The swipe-to-delete reveal can miss on a loaded CI runner
+            // (run 44656643311: Delete never appeared after one swipe, while
+            // test07 passed on the same run, so this is lane flake, not the
+            // app). Retry the swipe once before failing.
+            if !app.buttons["Delete"].waitForExistence(timeout: 3) {
+                cell.swipeLeft()
+                XCTAssertTrue(app.buttons["Delete"].waitForExistence(timeout: 5))
+            }
             app.buttons["Delete"].tap()
         }
         XCTAssertTrue(app.buttons["add-profile-empty-button"].waitForExistence(timeout: 10))
