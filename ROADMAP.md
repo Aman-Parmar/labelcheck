@@ -15,7 +15,7 @@ A feature only moves from "not building" to the roadmap on a new decision with e
 - Paywall: StoreKit 2, $9.99/year + $19.99 lifetime, one Pro entitlement
 - Settings: privacy, attribution, support/privacy links, restore purchases
 - Real 1024x1024 app icon; labelcheck.singhsec.com support + privacy pages live
-- CI: Linux lint → macOS test + screenshots in parallel → archive (skipped until signing secrets exist); 11-shot screenshot lane with bundled sample data, deterministic and offline (08-alternatives added with LC-1, 09-search added with LC-3, 10-favorites added with Favorites, 11-lists added with shopping lists)
+- CI: Linux lint → macOS test + screenshots in parallel → archive (skipped until signing secrets exist); 15-shot screenshot lane with bundled sample data, deterministic and offline (08-alternatives added with LC-1, 09-search added with LC-3, 10-favorites added with Favorites, 11-lists added with shopping lists, 12-additives, 13-not-found, 14-diet-filters, 15-history-search)
 
 ## Sprint 1 — 2026-11-18 to 2026-11-24 (in progress)
 
