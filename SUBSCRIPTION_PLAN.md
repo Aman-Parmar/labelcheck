@@ -18,6 +18,7 @@
 | On-device AI explain (iOS 26+, iPhone 15 Pro+) | Yes, when available | Yes, when available |
 | Scan history | Most recent 10 | Unlimited |
 | Favorites (save products to re-check later) | Yes | Yes |
+| Shopping lists (group favorites into lists for the weekly shop) | Yes | Yes |
 | Allergen profiles | 1 profile | Multiple profiles |
 | OCR label explain | No | Yes |
 | Search by product name | No | Yes |

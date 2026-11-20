@@ -18,6 +18,8 @@ struct ProductView: View {
     // Favorites: heart toggle, free for every user. Loaded on appear
     // because the favorite state lives in SwiftData, not in the product.
     @State private var isFavorite = false
+    // Shopping lists (phase B): the sheet that adds this product to a list.
+    @State private var showingAddToList = false
 
     // LC-1 alternatives: same-category products with a higher Nutri-Score.
     // Loaded once when the card appears; nil while loading, empty when
@@ -62,6 +64,15 @@ struct ProductView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    showingAddToList = true
+                } label: {
+                    Image(systemName: "cart.badge.plus")
+                }
+                .accessibilityLabel("Add to a shopping list")
+                .accessibilityIdentifier("add-to-list-button")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
                     isFavorite = FavoriteProduct.toggle(product: product, in: modelContext)
                 } label: {
                     Image(systemName: isFavorite ? "heart.fill" : "heart")
@@ -69,6 +80,9 @@ struct ProductView: View {
                 .accessibilityLabel(isFavorite ? "Remove from favorites" : "Save to favorites")
                 .accessibilityIdentifier("favorite-toggle-button")
             }
+        }
+        .sheet(isPresented: $showingAddToList) {
+            AddToListSheet(product: product)
         }
         .navigationTitle(product.displayName)
         .navigationBarTitleDisplayMode(.inline)

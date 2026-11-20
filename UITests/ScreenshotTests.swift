@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 10 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 11 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -265,6 +265,24 @@ final class ScreenshotTests: XCTestCase {
         app.tabBars.buttons["Favorites"].tap()
         XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
         saveScreenshot(named: "10-favorites")
+    }
+
+    // MARK: - 15 Shopping lists (screenshot)
+
+    /// Shopping lists (phase B): screenshot mode seeds one list
+    /// ("Weekly shop") with Nutella and Coca-Cola, so the shot shows
+    /// items, not the empty state. The Lists pane lives under the
+    /// Favorites tab behind the segmented picker. Runs last
+    /// alphabetically, so it cannot disturb the earlier shots; it only
+    /// navigates.
+    func test15Lists() {
+        app.tabBars.buttons["Favorites"].tap()
+        app.segmentedControls.buttons["Lists"].tap()
+        let list = app.staticTexts["Weekly shop"]
+        XCTAssertTrue(list.waitForExistence(timeout: 10))
+        list.tap()
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        saveScreenshot(named: "11-lists")
     }
 
     // MARK: - Helper

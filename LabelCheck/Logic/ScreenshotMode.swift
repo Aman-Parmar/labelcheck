@@ -12,6 +12,7 @@ import SwiftData
 ///   the network (see `SampleProducts.json`).
 /// - History is seeded with those 3 products and two allergen profiles.
 /// - Favorites is seeded with the first 2 sample products.
+/// - One shopping list ("Weekly shop") is seeded with the same 2 products.
 /// - The "Read a label photo" button shows the bundled sample OCR text
 ///   instead of opening the photo picker.
 ///
@@ -108,6 +109,13 @@ enum ScreenshotSeeder {
         for product in SampleProducts.all.prefix(2) {
             modelContext.insert(FavoriteProduct(product: product))
         }
+        // Shopping lists (phase B): seed one list with the same two
+        // samples so the 11-lists shot shows items, not the empty state.
+        let weeklyShop = ShoppingList(name: "Weekly shop")
+        for product in SampleProducts.all.prefix(2) {
+            weeklyShop.items.append(ShoppingListItem(product: product))
+        }
+        modelContext.insert(weeklyShop)
         modelContext.insert(AllergenProfile(
             name: "Maya",
             allergens: ["milk", "tree-nut", "peanut"],
