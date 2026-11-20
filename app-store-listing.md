@@ -12,7 +12,7 @@ Scan food labels, privately.
 
 Scan any packaged food, know what's in it in 2 seconds, privately.
 
-Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g. Every additive on the card is explained in plain English: what each E-number is and what it does, from the public E-number list.
+Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g. Every additive on the card is explained in plain English: what each E-number is and what it does, from the public E-number list. If a card has wrong data, tap "Report wrong data on Open Food Facts" at the bottom of the card to correct it there.
 
 No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. The only things that leave the phone are the barcode you scan, sent to Open Food Facts to fetch that product, and, on a product with Nutri-Score D or E, that product's category, sent to fetch same-category products with a higher Nutri-Score. With Pro, the words you type in search are also sent to Open Food Facts to find matching products.
 
@@ -22,7 +22,7 @@ Once you have scanned a product, you can open it again with no signal: the full 
 
 Tap the heart on any product card to save it in Favorites, so the products you buy every week are one tap away. Favorites stay on your phone, free for everyone. Group favorites into shopping lists for the weekly shop, and check items off as you buy them. Lists stay on your phone, free for everyone.
 
-No barcode, or product not found? Photograph the ingredients panel and LabelCheck reads it on your phone.
+No barcode, or product not found? Photograph the ingredients panel and LabelCheck reads it on your phone. If the product is missing from the database entirely, tap "Add this product to Open Food Facts" to add it there. Open Food Facts will ask you to sign in with a free account.
 
 Free: unlimited barcode scans and the full product card, forever.
 Pro: unlimited history, multiple allergen profiles, OCR label explain, search by product name, and export. $9.99/year or $19.99 once.
