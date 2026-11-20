@@ -370,6 +370,19 @@ struct ScanView: View {
                     Text("Try reading the label photo instead. The ingredients panel is on the packet.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
+                    // Add a missing product: a deep link to the Open Food
+                    // Facts add form, not an in-app write. The write API
+                    // needs an account password, and the app holds no
+                    // secrets, so the user adds it in their own browser
+                    // with their own free account. The barcode travels
+                    // only in the link they choose to open.
+                    if let url = OpenFoodFactsLinks.addProductURL(barcode: barcode) {
+                        Link("Add this product to Open Food Facts", destination: url)
+                            .accessibilityIdentifier("add-product-link")
+                        Text("Open Food Facts will ask you to sign in with a free account to add it.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             case .error(let message):
                 errorCard(message)

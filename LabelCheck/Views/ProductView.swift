@@ -364,6 +364,18 @@ struct ProductView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("Data: Open Food Facts (ODbL), crowdsourced. Verify on the physical label. Product data may be incomplete or out of date.")
             Text("General information only, not medical or dietary advice, and not an allergy safety guarantee. Check with a doctor about dietary questions.")
+            // Report wrong data: a deep link to the product's Open Food
+            // Facts page, where "Edit the page" corrects it. Same
+            // no-secrets reason as the add-product link in ScanView:
+            // the user edits in their own browser with their own
+            // account. The barcode travels only in the link they open.
+            if let url = OpenFoodFactsLinks.productPageURL(barcode: product.barcode) {
+                Link("Report wrong data on Open Food Facts", destination: url)
+                    // The footer tints everything secondary; the link
+                    // keeps the accent colour so it still reads as a link.
+                    .foregroundStyle(Color.accentColor)
+                    .accessibilityIdentifier("report-data-link")
+            }
         }
         .font(.caption)
         .foregroundStyle(.secondary)

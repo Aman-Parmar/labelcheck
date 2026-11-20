@@ -218,7 +218,7 @@ jobs:
           # The screenshot tests launch the app in --screenshot-mode
           # (bundled sample data, no network) on the iPhone 17 Pro Max
           # simulator (1320x2868, the primary App Store size) and write
-          # twelve PNGs to /tmp/labelcheck-screenshots. A clean status bar
+          # thirteen PNGs to /tmp/labelcheck-screenshots. A clean status bar
           # (9:41, full signal, full battery) is set before the lane runs.
           # Push to main only: screenshots cost macOS minutes, and pull
           # requests already get the unit tests plus a compile of the
@@ -232,11 +232,11 @@ jobs:
             -only-testing:LabelCheckUITests/ScreenshotTests \
             -resultBundlePath build/screenshots-results
           ls -la /tmp/labelcheck-screenshots
-          # The lane writes exactly twelve PNGs (01-scan … 12-additives;
+          # The lane writes exactly thirteen PNGs (01-scan … 13-not-found;
           # test08/test09/test12/test13 are gating checks and save none).
-          # Require all twelve: a 9-shot threshold from the v1 lane would
+          # Require all thirteen: a 9-shot threshold from the v1 lane would
           # pass with two listing shots missing.
-          test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 12
+          test "$(ls /tmp/labelcheck-screenshots/*.png | wc -l)" -ge 13
 
       - name: Upload App Store screenshots
         uses: actions/upload-artifact@v6

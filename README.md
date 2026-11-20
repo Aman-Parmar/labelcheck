@@ -122,7 +122,7 @@ Or press Cmd-U in Xcode. Unit tests live in `Tests/` and cover Open Food Facts p
 
 ### 7. Screenshots
 
-The screenshot lane is a UI test target (`UITests/ScreenshotTests.swift`). It launches the app in `--screenshot-mode` (bundled sample data, no network) and captures twelve shots on the iPhone 17 Pro Max simulator. In CI it runs in parallel with the unit tests; locally:
+The screenshot lane is a UI test target (`UITests/ScreenshotTests.swift`). It launches the app in `--screenshot-mode` (bundled sample data, no network) and captures thirteen shots on the iPhone 17 Pro Max simulator. In CI it runs in parallel with the unit tests; locally:
 
 ```bash
 xcodebuild test \

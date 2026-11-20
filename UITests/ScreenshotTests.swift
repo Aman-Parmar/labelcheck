@@ -1,6 +1,6 @@
 import XCTest
 
-/// App Store screenshot lane — 12 shots on the iPhone 17 Pro Max simulator.
+/// App Store screenshot lane — 13 shots on the iPhone 17 Pro Max simulator.
 /// Real simulator screenshots of the real app, never mockups. The app runs
 /// in `--screenshot-mode`: lookups come from bundled sample JSON (Nutella,
 /// Coca-Cola, Kinder Bueno), history is seeded, and the OCR shot uses
@@ -312,6 +312,30 @@ final class ScreenshotTests: XCTestCase {
         }
         XCTAssertTrue(heading.waitForExistence(timeout: 10))
         saveScreenshot(named: "12-additives")
+    }
+
+    // MARK: - 17 Not found (screenshot)
+
+    /// Not-found state: a barcode the bundled sample data does not have
+    /// shows the "Not found" card with the "Add this product" link to
+    /// Open Food Facts. Runs last alphabetically, so it cannot disturb
+    /// the earlier shots; it only uses the Scan tab.
+    func test17NotFound() {
+        app.tabBars.buttons["Scan"].tap()
+        let field = app.textFields["manual-barcode-field"]
+        field.tap()
+        field.typeText("0000000000001")
+        app.buttons["manual-lookup-button"].tap()
+        XCTAssertTrue(app.staticTexts["Not found"].waitForExistence(timeout: 10))
+        // The status card sits below the OCR section: scroll it into
+        // view. The link label is the wait target; a Link's identifier
+        // does not surface reliably in the XCUI tree.
+        let linkLabel = app.staticTexts["Add this product to Open Food Facts"]
+        XCTAssertTrue(linkLabel.waitForExistence(timeout: 10))
+        for _ in 0..<5 where !linkLabel.isHittable {
+            app.swipeUp()
+        }
+        saveScreenshot(named: "13-not-found")
     }
 
     // MARK: - Helper
