@@ -12,7 +12,7 @@ Scan food labels, privately.
 
 Scan any packaged food, know what's in it in 2 seconds, privately.
 
-Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g. Every additive on the card is explained in plain English: what each E-number is and what it does, from the public E-number list. If a card has wrong data, tap "Report wrong data on Open Food Facts" at the bottom of the card to correct it there.
+Point your camera at a barcode. LabelCheck looks it up in Open Food Facts and shows you the product card: Nutri-Score, NOVA group, listed allergens, ingredients, and nutrition per 100 g. Every card also has an "In plain English" section that restates the label in plain words, from the product's own data. Every additive on the card is explained in plain English: what each E-number is and what it does, from the public E-number list. If a card has wrong data, tap "Report wrong data on Open Food Facts" at the bottom of the card to correct it there.
 
 No account. No ads. No tracking. Your scan history and allergen profiles stay on your phone. Search your history by name, brand, or barcode, free for everyone. The only things that leave the phone are the barcode you scan, sent to Open Food Facts to fetch that product, and, on a product with Nutri-Score D or E, that product's category, sent to fetch same-category products with a higher Nutri-Score. With Pro, the words you type in search are also sent to Open Food Facts to find matching products.
 
