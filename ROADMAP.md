@@ -37,7 +37,7 @@ Sprint goal: close the gaps users complain about most in every competing scanner
 
 - Done: all 8 sprint items built and independently QA-passed (LC-1, LC-2, LC-3, Favorites + shopping lists, additive explainer, diet filters, add/report links, history search), plus QA-6 and QA-1 to QA-11. CI run 44690947153 green, all 4 jobs, 101 unit tests 0 failures, 15 shots at 1320x2868, all eyeballed in this run (01, 06, 08, 14, 15 checked by eye; no clipping, prices $9.99/$19.99, no verdict language). Zero open defects at review time; QA-12 filed 2026-11-20 (live site pages stale after the Nov 19 links disclosure — needs hPanel re-upload, blocked on Aman).
 - Not done: nothing. Only remaining Next item is the shareable product card, gated on real users asking — no evidence, not built.
-- Carried to Monday's PM job: history-search "No scans match ..." empty state is code-only, unproven by screenshot; non-English ingredient text can miss a diet/allergen fail (matchers are English-only) — observation, not a defect. Launch still blocked only on Aman's enrolment + signing secrets and real-device testing.
+- Carried to Monday's PM job: non-English ingredient text can miss a diet/allergen fail (matchers are English-only) — observation, not a defect. The history-search "No scans match ..." empty state carried item is closed 2026-11-21 (QA-17: UI test proves it renders, CI run 44885736619). Launch still blocked only on Aman's enrolment + signing secrets and real-device testing.
 - Retrospective notes: LESSONS.md section 8.
 
 ## Next (prioritised backlog, evidence-scored)
