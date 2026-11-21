@@ -21,6 +21,7 @@ A native iOS food-label scanner. Scan a barcode, get the product card: name, bra
 - History: every scan saved on the phone (free shows the most recent 10, Pro unlimited), searchable by name, brand, or barcode
 - Favorites: tap the heart on any product card to save it for the weekly shop, on this phone only, free for everyone
 - Shopping lists: group favorites into named lists for the weekly shop, check items off as you buy them, on this phone only, free for everyone
+- Missing or wrong data: a Not found card links to add the product on Open Food Facts, and every product card links to report wrong data there; both open the browser, and adding needs a free Open Food Facts sign-in
 - Plain-English label explain: a deterministic card built from the product's own data; on iPhone 15 Pro+ with Apple Intelligence (iOS 26) an on-device model can also explain it
 - Pro (paid): unlimited history, multiple allergen profiles, OCR label explain, search by product name, export
 
