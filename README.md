@@ -14,6 +14,7 @@ A native iOS food-label scanner. Scan a barcode, get the product card: name, bra
 
 - Scan a barcode (camera) or type the digits under it — unlimited scans, free, forever
 - Product card: name, brand, Nutri-Score A–E, NOVA group 1–4, listed allergens, ingredients, nutrition per 100 g
+- Healthier alternatives: on a product with Nutri-Score D or E, the card shows same-category products with a higher Nutri-Score, from Open Food Facts; tap one to open its card
 - Additive explainer: every E-number on the card explained in plain English (what it is, what it does), from the public E-number list; no verdict, free for everyone
 - Allergen profiles: set the allergens you watch for; every product card flags matches on-device
 - Diet filters: add vegan, gluten-free, or no seed oils to a profile; every product card shows whether it matches, from Open Food Facts data, on-device
