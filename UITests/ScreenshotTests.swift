@@ -434,6 +434,24 @@ final class ScreenshotTests: XCTestCase {
         saveScreenshot(named: "15-history-search")
     }
 
+    // MARK: - 20 History search, no match
+
+    // Proves the "No scans match ..." empty state renders: it was
+    // verified in code only when history search shipped (HistoryView
+    // renders the row when filteredItems is empty). No screenshot: the
+    // lane stays at 15 shots, this test asserts behaviour only.
+    func test20HistorySearchNoMatch() {
+        app.tabBars.buttons["History"].tap()
+        XCTAssertTrue(app.staticTexts["Nutella"].waitForExistence(timeout: 10))
+        let searchField = app.searchFields["Search history"]
+        XCTAssertTrue(searchField.waitForExistence(timeout: 10))
+        searchField.tap()
+        searchField.typeText("zzzz")
+        XCTAssertTrue(app.staticTexts["No scans match \"zzzz\""].waitForExistence(timeout: 10))
+        XCTAssertFalse(app.staticTexts["Nutella"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["Coca-Cola"].waitForExistence(timeout: 3))
+    }
+
     // MARK: - Helper
 
     /// Saves the screenshot both as an XCTAttachment (in the xcresult) and
